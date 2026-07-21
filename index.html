@@ -1,1786 +1,1213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>B.E.S.T Barangay Electronic System</title>
-    <!-- Font Awesome CDN - GitHub friendly -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" 
-          integrity="sha512-SnH6WKcxZsjUD3J6kFp8VvxIe0vMvM+JgH6A4T+aRzU8aN7J/qv+8NfqXeHcM6KJfTfJ+6P/tlHZb8J6E+Yg==" 
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        /* ====== style.css (fully embedded) ====== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
-        }
-
-        body {
-            background: #f4f7fb;
-            color: #1e293b;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* ---------- topbar ---------- */
-        .topbar {
-            background: #0b2b4a;
-            color: white;
-            padding: 0 2rem;
-            height: 72px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            flex-wrap: wrap;
-        }
-
-        .top-left {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo img {
-            height: 44px;
-            width: 44px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .barangay-title h2 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .barangay-title span {
-            font-size: 0.7rem;
-            opacity: 0.8;
-            font-weight: 300;
-            display: block;
-            margin-top: -2px;
-        }
-
-        .top-menu {
-            display: flex;
-            gap: 1.2rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .top-menu a {
-            color: #d6e3f0;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.4rem 0.6rem;
-            border-radius: 30px;
-            transition: 0.2s;
-        }
-
-        .top-menu a i {
-            font-size: 0.9rem;
-        }
-
-        .top-menu a:hover,
-        .top-menu a.active {
-            background: rgba(255, 255, 255, 0.12);
-            color: white;
-        }
-
-        .top-right {
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-        }
-
-        .notification {
-            background: rgba(255, 255, 255, 0.08);
-            border: none;
-            color: white;
-            padding: 0.5rem 0.7rem;
-            border-radius: 30px;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            position: relative;
-        }
-
-        .notification span {
-            background: #e74c3c;
-            color: white;
-            border-radius: 50%;
-            padding: 0.1rem 0.5rem;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-
-        .profile {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            cursor: default;
-        }
-
-        .profile img {
-            height: 36px;
-            width: 36px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            object-fit: cover;
-        }
-
-        .profile h4 {
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .profile small {
-            font-size: 0.65rem;
-            opacity: 0.7;
-            display: block;
-            margin-top: -2px;
-        }
-
-        .profile i {
-            opacity: 0.6;
-            font-size: 0.8rem;
-        }
-
-        /* ---------- container & sidebar ---------- */
-        .container {
-            display: flex;
-            flex: 1;
-        }
-
-        .sidebar {
-            width: 240px;
-            background: white;
-            padding: 1.5rem 0.8rem;
-            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.03);
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-            border-right: 1px solid #e9edf4;
-            min-height: calc(100vh - 72px);
-            position: sticky;
-            top: 72px;
-            align-self: flex-start;
-        }
-
-        .side-link {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            padding: 0.7rem 1rem;
-            border-radius: 12px;
-            color: #334155;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: 0.15s;
-        }
-
-        .side-link i {
-            width: 20px;
-            font-size: 1rem;
-            color: #5b6f87;
-        }
-
-        .side-link:hover {
-            background: #f1f5f9;
-            color: #0b2b4a;
-        }
-
-        .side-link.active {
-            background: #e9eff6;
-            color: #0b2b4a;
-            font-weight: 600;
-        }
-
-        .side-link.active i {
-            color: #0b2b4a;
-        }
-
-        .sidebar-footer {
-            margin-top: auto;
-            padding: 1rem 0.8rem;
-            background: #f8fafc;
-            border-radius: 16px;
-            text-align: center;
-            border: 1px solid #eef2f6;
-        }
-
-        .sidebar-footer h3 {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #0b2b4a;
-        }
-
-        .sidebar-footer span {
-            font-size: 0.7rem;
-            color: #5b6f87;
-        }
-
-        /* ---------- content ---------- */
-        .content {
-            flex: 1;
-            padding: 2rem 2rem 1.5rem;
-            max-width: calc(100% - 240px);
-            background: #f4f7fb;
-        }
-
-        /* hero */
-        .hero {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: white;
-            padding: 1.8rem 2.2rem;
-            border-radius: 28px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.02);
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-        }
-
-        .hero-left h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #0b2b4a;
-        }
-
-        .hero-left p {
-            color: #475569;
-            margin-top: 0.3rem;
-            font-size: 1rem;
-        }
-
-        .hero-right img {
-            height: 70px;
-            width: auto;
-            border-radius: 20px;
-            object-fit: cover;
-            opacity: 0.9;
-        }
-
-        /* cards */
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .card {
-            background: white;
-            padding: 1.5rem 1.2rem;
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-            border: 1px solid #edf2f7;
-            transition: 0.2s;
-        }
-
-        .card i {
-            font-size: 2rem;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 16px;
-            color: white;
-        }
-
-        .card.blue i {
-            background: #2563eb;
-        }
-        .card.green i {
-            background: #16a34a;
-        }
-        .card.purple i {
-            background: #7c3aed;
-        }
-        .card.orange i {
-            background: #ea580c;
-        }
-        .card.red i {
-            background: #dc2626;
-        }
-
-        .card h2 {
-            font-size: 1.6rem;
-            font-weight: 700;
-        }
-
-        .card p {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #1e293b;
-        }
-
-        .card small {
-            font-size: 0.7rem;
-            color: #64748b;
-            display: block;
-        }
-
-        /* table */
-        .table-container {
-            background: white;
-            border-radius: 28px;
-            padding: 1.5rem 1.8rem 2rem;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.01);
-            border: 1px solid #edf2f7;
-            margin-bottom: 2.5rem;
-        }
-
-        .table-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 1.8rem;
-        }
-
-        .table-header h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #0b2b4a;
-        }
-
-        .table-header span {
-            font-size: 0.85rem;
-            color: #475569;
-        }
-
-        .table-tools {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 0.6rem;
-        }
-
-        .table-tools input,
-        .table-tools select {
-            padding: 0.5rem 0.9rem;
-            border-radius: 40px;
-            border: 1px solid #dce2ec;
-            background: white;
-            font-size: 0.8rem;
-            outline: none;
-            transition: 0.15s;
-        }
-
-        .table-tools input:focus,
-        .table-tools select:focus {
-            border-color: #0b2b4a;
-            box-shadow: 0 0 0 3px rgba(11, 43, 74, 0.08);
-        }
-
-        .table-tools button {
-            background: #0b2b4a;
-            border: none;
-            color: white;
-            padding: 0.5rem 1.2rem;
-            border-radius: 40px;
-            font-weight: 500;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .table-tools button:hover {
-            background: #1a3f5f;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-        }
-
-        th {
-            text-align: left;
-            padding: 0.8rem 0.4rem 0.8rem 0;
-            font-weight: 600;
-            color: #334155;
-            border-bottom: 2px solid #eef2f6;
-        }
-
-        td {
-            padding: 0.8rem 0.4rem 0.8rem 0;
-            border-bottom: 1px solid #f1f5f9;
-            color: #1e293b;
-        }
-
-        td button {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            padding: 0.2rem 0.4rem;
-            border-radius: 8px;
-            transition: 0.1s;
-        }
-
-        td button:hover {
-            background: #f1f5f9;
-        }
-
-        .coming {
-            text-align: center;
-            color: #94a3b8;
-            font-style: italic;
-            padding: 2.5rem 0;
-        }
-
-        /* Modal Form Styles with Scroll */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 999;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.6);
-            animation: fadeIn 0.3s;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 20px auto;
-            padding: 2rem;
-            border-radius: 28px;
-            max-width: 580px;
-            width: 95%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            animation: slideIn 0.3s;
-            position: relative;
-            max-height: 92vh;
-            overflow-y: auto;
-        }
-
-        .modal-content::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .modal-content::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 10px;
-        }
-
-        .modal-content::-webkit-scrollbar-thumb {
-            background: #0b2b4a;
-            border-radius: 10px;
-        }
-
-        .modal-content::-webkit-scrollbar-thumb:hover {
-            background: #1a3f5f;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-50px) scale(0.95); opacity: 0; }
-            to { transform: translateY(0) scale(1); opacity: 1; }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            position: sticky;
-            top: 0;
-            background: white;
-            z-index: 10;
-            padding: 0 0 0.8rem 0;
-            border-bottom: 2px solid #eef2f6;
-        }
-
-        .modal-header h2 {
-            color: #0b2b4a;
-            font-size: 1.4rem;
-        }
-
-        .modal-header h2 i {
-            color: #0b2b4a;
-            margin-right: 0.5rem;
-        }
-
-        .close-modal {
-            font-size: 1.8rem;
-            cursor: pointer;
-            color: #94a3b8;
-            transition: 0.2s;
-            background: none;
-            border: none;
-            padding: 0 0.5rem;
-            line-height: 1;
-        }
-
-        .close-modal:hover {
-            color: #dc2626;
-            transform: rotate(90deg);
-        }
-
-        .scroll-indicator {
-            text-align: center;
-            color: #0b2b4a;
-            font-size: 0.75rem;
-            padding: 0.5rem;
-            background: #f8fafc;
-            border-radius: 20px;
-            margin-bottom: 1.2rem;
-            border: 1px dashed #cbd5e1;
-            display: none;
-        }
-
-        .scroll-indicator.show {
-            display: block;
-        }
-
-        .scroll-indicator i {
-            margin-right: 0.3rem;
-            animation: bounce 1.5s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        .form-scroll-container {
-            max-height: 55vh;
-            overflow-y: auto;
-            padding-right: 8px;
-            padding-bottom: 5px;
-        }
-
-        .form-scroll-container::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .form-scroll-container::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 10px;
-        }
-
-        .form-scroll-container::-webkit-scrollbar-thumb {
-            background: #0b2b4a;
-            border-radius: 10px;
-        }
-
-        .form-scroll-container::-webkit-scrollbar-thumb:hover {
-            background: #1a3f5f;
-        }
-
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-            color: #334155;
-            font-size: 0.9rem;
-        }
-
-        .form-group label .required {
-            color: #dc2626;
-            font-weight: 700;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.7rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            transition: 0.2s;
-            background: white;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            border-color: #0b2b4a;
-            box-shadow: 0 0 0 4px rgba(11, 43, 74, 0.08);
-            outline: none;
-        }
-
-        .form-group input:hover,
-        .form-group select:hover,
-        .form-group textarea:hover {
-            border-color: #94a3b8;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 60px;
-            max-height: 150px;
-            font-family: inherit;
-        }
-
-        .form-group .field-hint {
-            font-size: 0.7rem;
-            color: #64748b;
-            margin-top: 0.2rem;
-            display: block;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-            justify-content: flex-end;
-            position: sticky;
-            bottom: 0;
-            background: white;
-            padding: 1rem 0 0.5rem 0;
-            border-top: 2px solid #eef2f6;
-        }
-
-        .form-actions button {
-            padding: 0.6rem 1.8rem;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: 0.2s;
-            border: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-submit {
-            background: #0b2b4a;
-            color: white;
-        }
-
-        .btn-submit:hover {
-            background: #1a3f5f;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(11, 43, 74, 0.3);
-        }
-
-        .btn-submit:active {
-            transform: translateY(0);
-        }
-
-        .btn-cancel {
-            background: #f1f5f9;
-            color: #334155;
-        }
-
-        .btn-cancel:hover {
-            background: #e2e8f0;
-        }
-
-        .barangay-section {
-            background: white;
-            border-radius: 28px;
-            padding: 1.5rem 1.8rem 2rem;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.01);
-            border: 1px solid #edf2f7;
-            margin-bottom: 2.5rem;
-        }
-
-        .barangay-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .barangay-header h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #0b2b4a;
-        }
-
-        .barangay-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-
-        .barangay-item {
-            background: #f8fafc;
-            padding: 1rem;
-            border-radius: 16px;
-            border: 1px solid #eef2f6;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: 0.2s;
-        }
-
-        .barangay-item:hover {
-            border-color: #0b2b4a;
-            background: #f1f5f9;
-        }
-
-        .barangay-item .info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .barangay-item .info .name {
-            font-weight: 600;
-            color: #0b2b4a;
-        }
-
-        .barangay-item .info .code {
-            font-size: 0.75rem;
-            color: #64748b;
-        }
-
-        .barangay-item .actions button {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0.3rem 0.5rem;
-            border-radius: 8px;
-            transition: 0.2s;
-            font-size: 0.9rem;
-        }
-
-        .barangay-item .actions button:hover {
-            background: #e2e8f0;
-        }
-
-        .btn-create-barangay {
-            background: #0b2b4a;
-            color: white;
-            border: none;
-            padding: 0.6rem 1.5rem;
-            border-radius: 40px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-create-barangay:hover {
-            background: #1a3f5f;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(11, 43, 74, 0.3);
-        }
-
-        .preview-pages {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 1.2rem;
-            margin-bottom: 2rem;
-        }
-
-        .preview-card {
-            background: white;
-            padding: 1.2rem 1rem;
-            border-radius: 24px;
-            border: 1px solid #edf2f7;
-            text-align: center;
-            transition: 0.2s;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.01);
-        }
-
-        .preview-card h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #0b2b4a;
-        }
-
-        .preview-card p {
-            color: #64748b;
-            font-size: 0.8rem;
-            margin: 0.3rem 0 0.8rem;
-        }
-
-        .preview-card button {
-            background: #f1f5f9;
-            border: none;
-            padding: 0.4rem 0.9rem;
-            border-radius: 40px;
-            font-size: 0.7rem;
-            font-weight: 500;
-            color: #1e293b;
-            cursor: pointer;
-            transition: 0.15s;
-        }
-
-        .preview-card button:hover {
-            background: #e2e8f0;
-        }
-
-        footer {
-            text-align: center;
-            font-size: 0.75rem;
-            color: #64748b;
-            padding-top: 1.5rem;
-            border-top: 1px solid #e2e8f0;
-            margin-top: 0.5rem;
-        }
-
-        /* responsive */
-        @media (max-width: 1024px) {
-            .content {
-                max-width: 100%;
-                padding: 1.5rem;
-            }
-            .sidebar {
-                width: 200px;
-                padding: 1rem 0.5rem;
-            }
-            .top-menu a {
-                font-size: 0.75rem;
-                padding: 0.2rem 0.5rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .topbar {
-                height: auto;
-                padding: 0.8rem 1rem;
-                flex-direction: column;
-                gap: 0.5rem;
-                align-items: stretch;
-            }
-            .top-left {
-                justify-content: center;
-            }
-            .top-menu {
-                justify-content: center;
-            }
-            .top-right {
-                justify-content: center;
-            }
-            .container {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 0.2rem;
-                padding: 0.8rem;
-                min-height: auto;
-                border-right: none;
-                border-bottom: 1px solid #e9edf4;
-                position: static;
-            }
-            .side-link {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.8rem;
-            }
-            .sidebar-footer {
-                display: none;
-            }
-            .content {
-                max-width: 100%;
-                padding: 1rem;
-            }
-            .hero {
-                flex-direction: column;
-                text-align: center;
-                padding: 1.5rem;
-            }
-            .hero-right img {
-                height: 50px;
-            }
-            .table-tools {
-                justify-content: flex-start;
-            }
-            .table-container {
-                padding: 1rem;
-                overflow-x: auto;
-            }
-            .cards {
-                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            }
-            .preview-pages {
-                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            }
-            .modal-content {
-                margin: 10px auto;
-                padding: 1.2rem;
-                max-height: 95vh;
-            }
-            .barangay-grid {
-                grid-template-columns: 1fr;
-            }
-            .form-scroll-container {
-                max-height: 45vh;
-            }
-            .modal-header h2 {
-                font-size: 1.1rem;
-            }
-            .form-actions {
-                flex-direction: column;
-            }
-            .form-actions button {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .top-menu a {
-                font-size: 0.7rem;
-            }
-            .card {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.3rem;
-            }
-            .card i {
-                width: 40px;
-                height: 40px;
-                font-size: 1.5rem;
-            }
-            .modal-content {
-                padding: 1rem;
-                margin: 5px auto;
-                border-radius: 20px;
-            }
-            .form-scroll-container {
-                max-height: 35vh;
-                padding-right: 5px;
-            }
-            .form-group input,
-            .form-group select,
-            .form-group textarea {
-                padding: 0.5rem 0.8rem;
-                font-size: 0.8rem;
-            }
-            .form-actions {
-                padding: 0.8rem 0 0.3rem 0;
-            }
-            .form-actions button {
-                padding: 0.5rem 1rem;
-                font-size: 0.8rem;
-            }
-        }
-
-        .form-scroll-container {
-            scrollbar-width: thin;
-            scrollbar-color: #0b2b4a #f1f5f9;
-        }
-
-        /* GitHub Pages specific - prevent caching issues */
-        .github-pages-badge {
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>B.E.S.T · Barangay System</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+    body {
+      background: #f4f7fb;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    /* topbar */
+    .topbar {
+      background: #0b2b4a;
+      color: white;
+      padding: 0 2rem;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+    }
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .logo img {
+      height: 44px;
+      width: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.3);
+      background: white;
+    }
+    .barangay-title h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .barangay-title span {
+      font-size: 0.7rem;
+      opacity: 0.8;
+      font-weight: 300;
+      display: block;
+      margin-top: -2px;
+    }
+    .top-menu {
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .top-menu a {
+      color: #d6e3f0;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: 30px;
+      transition: 0.2s;
+    }
+    .top-menu a i { font-size: 0.9rem; }
+    .top-menu a:hover, .top-menu a.active {
+      background: rgba(255,255,255,0.12);
+      color: white;
+    }
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .notification {
+      background: rgba(255,255,255,0.08);
+      border: none;
+      color: white;
+      padding: 0.5rem 0.7rem;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      position: relative;
+    }
+    .notification span {
+      background: #e74c3c;
+      color: white;
+      border-radius: 50%;
+      padding: 0.1rem 0.5rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: default;
+    }
+    .profile img {
+      height: 36px;
+      width: 36px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.3);
+      object-fit: cover;
+    }
+    .profile h4 { font-size: 0.9rem; font-weight: 500; }
+    .profile small {
+      font-size: 0.65rem;
+      opacity: 0.7;
+      display: block;
+      margin-top: -2px;
+    }
+    .profile i { opacity: 0.6; font-size: 0.8rem; }
+
+    /* container & sidebar */
+    .container {
+      display: flex;
+      flex: 1;
+    }
+    .sidebar {
+      width: 240px;
+      background: white;
+      padding: 1.5rem 0.8rem;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      border-right: 1px solid #e9edf4;
+      min-height: calc(100vh - 72px);
+      position: sticky;
+      top: 72px;
+      align-self: flex-start;
+    }
+    .side-link {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.7rem 1rem;
+      border-radius: 12px;
+      color: #334155;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: 0.15s;
+    }
+    .side-link i { width: 20px; font-size: 1rem; color: #5b6f87; }
+    .side-link:hover { background: #f1f5f9; color: #0b2b4a; }
+    .side-link.active { background: #e9eff6; color: #0b2b4a; font-weight: 600; }
+    .side-link.active i { color: #0b2b4a; }
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 1rem 0.8rem;
+      background: #f8fafc;
+      border-radius: 16px;
+      text-align: center;
+      border: 1px solid #eef2f6;
+    }
+    .sidebar-footer h3 { font-size: 0.9rem; font-weight: 600; color: #0b2b4a; }
+    .sidebar-footer span { font-size: 0.7rem; color: #5b6f87; }
+
+    /* content */
+    .content {
+      flex: 1;
+      padding: 2rem 2rem 1.5rem;
+      max-width: calc(100% - 240px);
+      background: #f4f7fb;
+    }
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 1.8rem 2.2rem;
+      border-radius: 28px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.02);
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .hero-left h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #0b2b4a;
+    }
+    .hero-left p {
+      color: #475569;
+      margin-top: 0.3rem;
+      font-size: 1rem;
+    }
+    .hero-right img {
+      height: 70px;
+      width: auto;
+      border-radius: 20px;
+      object-fit: cover;
+      opacity: 0.9;
+    }
+
+    /* cards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .card {
+      background: white;
+      padding: 1.5rem 1.2rem;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      border: 1px solid #edf2f7;
+      transition: 0.2s;
+    }
+    .card i {
+      font-size: 2rem;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      color: white;
+    }
+    .card.blue i { background: #2563eb; }
+    .card.green i { background: #16a34a; }
+    .card.purple i { background: #7c3aed; }
+    .card.orange i { background: #ea580c; }
+    .card.red i { background: #dc2626; }
+    .card h2 { font-size: 1.6rem; font-weight: 700; }
+    .card p { font-weight: 600; font-size: 0.9rem; color: #1e293b; }
+    .card small { font-size: 0.7rem; color: #64748b; display: block; }
+
+    /* table */
+    .table-container {
+      background: white;
+      border-radius: 28px;
+      padding: 1.5rem 1.8rem 2rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.01);
+      border: 1px solid #edf2f7;
+      margin-bottom: 2.5rem;
+    }
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.8rem;
+    }
+    .table-header h2 { font-size: 1.3rem; font-weight: 700; color: #0b2b4a; }
+    .table-header span { font-size: 0.85rem; color: #475569; }
+    .table-tools {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .table-tools input, .table-tools select {
+      padding: 0.5rem 0.9rem;
+      border-radius: 40px;
+      border: 1px solid #dce2ec;
+      background: white;
+      font-size: 0.8rem;
+      outline: none;
+      transition: 0.15s;
+    }
+    .table-tools input:focus, .table-tools select:focus {
+      border-color: #0b2b4a;
+      box-shadow: 0 0 0 3px rgba(11,43,74,0.08);
+    }
+    .table-tools button {
+      background: #0b2b4a;
+      border: none;
+      color: white;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .table-tools button:hover { background: #1a3f5f; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    th {
+      text-align: left;
+      padding: 0.8rem 0.4rem 0.8rem 0;
+      font-weight: 600;
+      color: #334155;
+      border-bottom: 2px solid #eef2f6;
+    }
+    td {
+      padding: 0.8rem 0.4rem 0.8rem 0;
+      border-bottom: 1px solid #f1f5f9;
+      color: #1e293b;
+    }
+    td button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0.2rem 0.4rem;
+      border-radius: 8px;
+      transition: 0.1s;
+    }
+    td button:hover { background: #f1f5f9; }
+    .coming {
+      text-align: center;
+      color: #94a3b8;
+      font-style: italic;
+      padding: 2.5rem 0;
+    }
+
+    /* modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      animation: fadeIn 0.3s;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .modal-content {
+      background-color: white;
+      margin: 20px auto;
+      padding: 2rem;
+      border-radius: 28px;
+      max-width: 580px;
+      width: 95%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: slideIn 0.3s;
+      position: relative;
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+    .modal-content::-webkit-scrollbar { width: 8px; }
+    .modal-content::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+    .modal-content::-webkit-scrollbar-thumb { background: #0b2b4a; border-radius: 10px; }
+    .modal-content::-webkit-scrollbar-thumb:hover { background: #1a3f5f; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideIn { from { transform: translateY(-50px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      position: sticky;
+      top: 0;
+      background: white;
+      z-index: 10;
+      padding: 0 0 0.8rem 0;
+      border-bottom: 2px solid #eef2f6;
+    }
+    .modal-header h2 { color: #0b2b4a; font-size: 1.4rem; }
+    .modal-header h2 i { color: #0b2b4a; margin-right: 0.5rem; }
+    .close-modal {
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: #94a3b8;
+      transition: 0.2s;
+      background: none;
+      border: none;
+      padding: 0 0.5rem;
+      line-height: 1;
+    }
+    .close-modal:hover { color: #dc2626; transform: rotate(90deg); }
+
+    .scroll-indicator {
+      text-align: center;
+      color: #0b2b4a;
+      font-size: 0.75rem;
+      padding: 0.5rem;
+      background: #f8fafc;
+      border-radius: 20px;
+      margin-bottom: 1.2rem;
+      border: 1px dashed #cbd5e1;
+      display: none;
+    }
+    .scroll-indicator.show { display: block; }
+    .scroll-indicator i { margin-right: 0.3rem; animation: bounce 1.5s infinite; }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+    .form-scroll-container {
+      max-height: 55vh;
+      overflow-y: auto;
+      padding-right: 8px;
+      padding-bottom: 5px;
+    }
+    .form-scroll-container::-webkit-scrollbar { width: 6px; }
+    .form-scroll-container::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+    .form-scroll-container::-webkit-scrollbar-thumb { background: #0b2b4a; border-radius: 10px; }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      color: #334155;
+      font-size: 0.9rem;
+    }
+    .form-group label .required { color: #dc2626; font-weight: 700; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      transition: 0.2s;
+      background: white;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: #0b2b4a;
+      box-shadow: 0 0 0 4px rgba(11,43,74,0.08);
+      outline: none;
+    }
+    .form-group input:hover, .form-group select:hover, .form-group textarea:hover {
+      border-color: #94a3b8;
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 60px;
+      max-height: 150px;
+      font-family: inherit;
+    }
+    .form-group .field-hint {
+      font-size: 0.7rem;
+      color: #64748b;
+      margin-top: 0.2rem;
+      display: block;
+    }
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      justify-content: flex-end;
+      position: sticky;
+      bottom: 0;
+      background: white;
+      padding: 1rem 0 0.5rem 0;
+      border-top: 2px solid #eef2f6;
+    }
+    .form-actions button {
+      padding: 0.6rem 1.8rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-submit { background: #0b2b4a; color: white; }
+    .btn-submit:hover { background: #1a3f5f; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(11,43,74,0.3); }
+    .btn-cancel { background: #f1f5f9; color: #334155; }
+    .btn-cancel:hover { background: #e2e8f0; }
+
+    .barangay-section {
+      background: white;
+      border-radius: 28px;
+      padding: 1.5rem 1.8rem 2rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.01);
+      border: 1px solid #edf2f7;
+      margin-bottom: 2.5rem;
+    }
+    .barangay-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .barangay-header h2 { font-size: 1.3rem; font-weight: 700; color: #0b2b4a; }
+    .barangay-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .barangay-item {
+      background: #f8fafc;
+      padding: 1rem;
+      border-radius: 16px;
+      border: 1px solid #eef2f6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: 0.2s;
+    }
+    .barangay-item:hover { border-color: #0b2b4a; background: #f1f5f9; }
+    .barangay-item .info { display: flex; flex-direction: column; }
+    .barangay-item .info .name { font-weight: 600; color: #0b2b4a; }
+    .barangay-item .info .code { font-size: 0.75rem; color: #64748b; }
+    .barangay-item .actions button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0.3rem 0.5rem;
+      border-radius: 8px;
+      transition: 0.2s;
+      font-size: 0.9rem;
+    }
+    .barangay-item .actions button:hover { background: #e2e8f0; }
+    .btn-create-barangay {
+      background: #0b2b4a;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 40px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-create-barangay:hover { background: #1a3f5f; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(11,43,74,0.3); }
+
+    .preview-pages {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .preview-card {
+      background: white;
+      padding: 1.2rem 1rem;
+      border-radius: 24px;
+      border: 1px solid #edf2f7;
+      text-align: center;
+      transition: 0.2s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.01);
+    }
+    .preview-card h3 { font-size: 1rem; font-weight: 600; color: #0b2b4a; }
+    .preview-card p { color: #64748b; font-size: 0.8rem; margin: 0.3rem 0 0.8rem; }
+    .preview-card button {
+      background: #f1f5f9;
+      border: none;
+      padding: 0.4rem 0.9rem;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #1e293b;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .preview-card button:hover { background: #e2e8f0; }
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #64748b;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 0.5rem;
+    }
+    .form-scroll-container { scrollbar-width: thin; scrollbar-color: #0b2b4a #f1f5f9; }
+
+    @media (max-width: 1024px) {
+      .content { max-width: 100%; padding: 1.5rem; }
+      .sidebar { width: 200px; padding: 1rem 0.5rem; }
+      .top-menu a { font-size: 0.75rem; padding: 0.2rem 0.5rem; }
+    }
+    @media (max-width: 768px) {
+      .topbar { height: auto; padding: 0.8rem 1rem; flex-direction: column; gap: 0.5rem; align-items: stretch; }
+      .top-left { justify-content: center; }
+      .top-menu { justify-content: center; }
+      .top-right { justify-content: center; }
+      .container { flex-direction: column; }
+      .sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 0.2rem; padding: 0.8rem; min-height: auto; border-right: none; border-bottom: 1px solid #e9edf4; position: static; }
+      .side-link { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+      .sidebar-footer { display: none; }
+      .content { max-width: 100%; padding: 1rem; }
+      .hero { flex-direction: column; text-align: center; padding: 1.5rem; }
+      .hero-right img { height: 50px; }
+      .table-tools { justify-content: flex-start; }
+      .table-container { padding: 1rem; overflow-x: auto; }
+      .cards { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+      .preview-pages { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+      .modal-content { margin: 10px auto; padding: 1.2rem; max-height: 95vh; }
+      .barangay-grid { grid-template-columns: 1fr; }
+      .form-scroll-container { max-height: 45vh; }
+      .modal-header h2 { font-size: 1.1rem; }
+      .form-actions { flex-direction: column; }
+      .form-actions button { width: 100%; justify-content: center; }
+    }
+    @media (max-width: 480px) {
+      .top-menu a { font-size: 0.7rem; }
+      .card { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+      .card i { width: 40px; height: 40px; font-size: 1.5rem; }
+      .modal-content { padding: 1rem; margin: 5px auto; border-radius: 20px; }
+      .form-scroll-container { max-height: 35vh; padding-right: 5px; }
+      .form-group input, .form-group select, .form-group textarea { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
+      .form-actions { padding: 0.8rem 0 0.3rem 0; }
+      .form-actions button { padding: 0.5rem 1rem; font-size: 0.8rem; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- ===== TOP NAVIGATION ===== -->
 <header class="topbar">
-    <div class="top-left">
-        <div class="logo">
-            <img src="BEST.png" alt="B.E.S.T Logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%230b2b4a\'/%3E%3Ctext x=\'12\' y=\'55\' font-family=\'Arial\' font-size=\'18\' fill=\'white\' font-weight=\'bold\'%3EBEST%3C/text%3E%3C/svg%3E'" />
-        </div>
-        <div class="barangay-title">
-            <h2>B.E.S.T</h2>
-            <span>Barangay Electronic System for Total Community Management</span>
-        </div>
+  <div class="top-left">
+    <div class="logo">
+      <img src="BEST.png" alt="B.E.S.T Logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%230b2b4a\'/%3E%3Ctext x=\'12\' y=\'55\' font-family=\'Arial\' font-size=\'18\' fill=\'white\' font-weight=\'bold\'%3EBEST%3C/text%3E%3C/svg%3E'" />
     </div>
-    <nav class="top-menu">
-        <a href="#" class="active"><i class="fa-solid fa-house"></i> Home</a>
-        <a href="#"><i class="fa-solid fa-users"></i> Citizens</a>
-        <a href="#"><i class="fa-solid fa-user-tie"></i> Officials</a>
-        <a href="#"><i class="fa-solid fa-box"></i> Services</a>
-        <a href="#"><i class="fa-solid fa-file-lines"></i> Certificates</a>
-        <a href="#"><i class="fa-solid fa-bullhorn"></i> Announcements</a>
-        <a href="#"><i class="fa-solid fa-chart-column"></i> Reports</a>
-    </nav>
-    <div class="top-right">
-        <button class="notification"><i class="fa-solid fa-bell"></i><span>3</span></button>
-        <div class="profile">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36">
-                <circle cx="50" cy="40" r="24" fill="#cbd5e1"/>
-                <circle cx="50" cy="90" r="34" fill="#cbd5e1"/>
-            </svg>
-            <div><h4>Admin</h4><small>Administrator</small></div>
-            <i class="fa-solid fa-angle-down"></i>
-        </div>
+    <div class="barangay-title">
+      <h2>B.E.S.T</h2>
+      <span>Barangay Electronic System for Total Community Management</span>
     </div>
+  </div>
+  <nav class="top-menu">
+    <a href="#" class="active"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="#"><i class="fa-solid fa-users"></i> Citizens</a>
+    <a href="#"><i class="fa-solid fa-user-tie"></i> Officials</a>
+    <a href="#"><i class="fa-solid fa-box"></i> Services</a>
+    <a href="#"><i class="fa-solid fa-file-lines"></i> Certificates</a>
+    <a href="#"><i class="fa-solid fa-bullhorn"></i> Announcements</a>
+    <a href="#"><i class="fa-solid fa-chart-column"></i> Reports</a>
+  </nav>
+  <div class="top-right">
+    <button class="notification"><i class="fa-solid fa-bell"></i><span>3</span></button>
+    <div class="profile">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36"><circle cx="50" cy="40" r="24" fill="#cbd5e1"/><circle cx="50" cy="90" r="34" fill="#cbd5e1"/></svg>
+      <div><h4>Admin</h4><small>Administrator</small></div>
+      <i class="fa-solid fa-angle-down"></i>
+    </div>
+  </div>
 </header>
 
-<!-- ===== MAIN ===== -->
 <div class="container">
+  <aside class="sidebar">
+    <a href="#" class="side-link active"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
+    <a href="#" class="side-link"><i class="fa-solid fa-users"></i> Citizens</a>
+    <a href="#" class="side-link"><i class="fa-solid fa-house"></i> Households</a>
+    <a href="#" class="side-link"><i class="fa-solid fa-user-tie"></i> Officials</a>
+    <a href="#" class="side-link"><i class="fa-solid fa-box"></i> Services</a>
+    <a href="#" class="side-link"><i class="fa-solid fa-file-lines"></i> Certificates</a>
+    <a href="#" class="side-link"><i class="fa-solid fa-bullhorn"></i> Announcements</a>
+    <a href="#" class="side-link"><i class="fa-solid fa-chart-column"></i> Reports</a>
+    <a href="#" class="side-link"><i class="fa-solid fa-gear"></i> Settings</a>
+    <div class="sidebar-footer"><h3>Serving Our Community</h3><span>Building a Better Tomorrow</span></div>
+  </aside>
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <a href="#" class="side-link active"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
-        <a href="#" class="side-link"><i class="fa-solid fa-users"></i> Citizens</a>
-        <a href="#" class="side-link"><i class="fa-solid fa-house"></i> Households</a>
-        <a href="#" class="side-link"><i class="fa-solid fa-user-tie"></i> Officials</a>
-        <a href="#" class="side-link"><i class="fa-solid fa-box"></i> Services</a>
-        <a href="#" class="side-link"><i class="fa-solid fa-file-lines"></i> Certificates</a>
-        <a href="#" class="side-link"><i class="fa-solid fa-bullhorn"></i> Announcements</a>
-        <a href="#" class="side-link"><i class="fa-solid fa-chart-column"></i> Reports</a>
-        <a href="#" class="side-link"><i class="fa-solid fa-gear"></i> Settings</a>
-        <div class="sidebar-footer">
-            <h3>Serving Our Community</h3>
-            <span>Building a Better Tomorrow</span>
+  <main class="content">
+    <section class="hero">
+      <div class="hero-left"><h1>Welcome to B.E.S.T</h1><p>Barangay Electronic System for Total Community Management</p></div>
+      <div class="hero-right"><img src="BEST.png" alt="B.E.S.T Logo" style="height:70px;width:auto;border-radius:20px;object-fit:cover;opacity:0.9;" onerror="this.style.display='none'" /></div>
+    </section>
+
+    <!-- DASHBOARD CARDS (all start at 0) -->
+    <section class="cards" id="statsCards">
+      <div class="card blue"><i class="fa-solid fa-users"></i><div><h2 id="totalCitizens">0</h2><p>Total Citizens</p><small>Registered in the system</small></div></div>
+      <div class="card green"><i class="fa-solid fa-house"></i><div><h2 id="totalHouseholds">0</h2><p>Households</p><small>Total Registered</small></div></div>
+      <div class="card purple"><i class="fa-solid fa-user"></i><div><h2 id="seniorCitizens">0</h2><p>Senior Citizens</p><small>60 years old and above</small></div></div>
+      <div class="card orange"><i class="fa-solid fa-person-booth"></i><div><h2 id="registeredVoters">0</h2><p>Registered Voters</p><small>Active Voters</small></div></div>
+      <div class="card red"><i class="fa-solid fa-shield-halved"></i><div><h2 id="activeCases">0</h2><p>Active Cases</p><small>For Follow Up</small></div></div>
+    </section>
+
+    <!-- BARANGAY MANAGEMENT -->
+    <section class="barangay-section">
+      <div class="barangay-header">
+        <h2><i class="fa-solid fa-map-pin"></i> Barangay Management</h2>
+        <button class="btn-create-barangay" id="createBarangayBtn"><i class="fa-solid fa-plus"></i> Create New Barangay</button>
+      </div>
+      <div id="barangayList" class="barangay-grid"></div>
+    </section>
+
+    <!-- CITIZENS TABLE -->
+    <section class="table-container">
+      <div class="table-header">
+        <div><h2>Citizens List</h2><span>Manage and view all registered citizens in the barangay.</span></div>
+        <div class="table-tools">
+          <input type="text" placeholder="Search by name, address or ID..." id="searchInput" />
+          <select id="barangayFilter"><option value="all">All Barangay</option></select>
+          <button id="openModalBtn"><i class="fa-solid fa-plus"></i> Add Citizen</button>
         </div>
-    </aside>
+      </div>
+      <table>
+        <thead><tr><th>ID</th><th>Full Name</th><th>Age</th><th>Gender</th><th>Address</th><th>Contact</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="citizenTable"><tr><td colspan="8" class="coming">— No citizens registered yet —</td></tr></tbody>
+      </table>
+    </section>
 
-    <!-- CONTENT -->
-    <main class="content">
-
-        <!-- HERO -->
-        <section class="hero">
-            <div class="hero-left">
-                <h1>Welcome to B.E.S.T</h1>
-                <p>Barangay Electronic System for Total Community Management</p>
-            </div>
-            <div class="hero-right">
-                <img src="BEST.png" alt="B.E.S.T Logo" style="height: 70px; width: auto; border-radius: 20px; object-fit: cover; opacity: 0.9;" onerror="this.style.display='none'" />
-            </div>
-        </section>
-
-        <!-- DASHBOARD CARDS -->
-        <section class="cards">
-            <div class="card blue"><i class="fa-solid fa-users"></i><div><h2>2,358</h2><p>Total Citizens</p><small>Registered in the system</small></div></div>
-            <div class="card green"><i class="fa-solid fa-house"></i><div><h2>842</h2><p>Households</p><small>Total Registered</small></div></div>
-            <div class="card purple"><i class="fa-solid fa-user"></i><div><h2>312</h2><p>Senior Citizens</p><small>60 years old and above</small></div></div>
-            <div class="card orange"><i class="fa-solid fa-person-booth"></i><div><h2>1,986</h2><p>Registered Voters</p><small>Active Voters</small></div></div>
-            <div class="card red"><i class="fa-solid fa-shield-halved"></i><div><h2>14</h2><p>Active Cases</p><small>For Follow Up</small></div></div>
-        </section>
-
-        <!-- BARANGAY MANAGEMENT SECTION -->
-        <section class="barangay-section">
-            <div class="barangay-header">
-                <h2><i class="fa-solid fa-map-pin"></i> Barangay Management</h2>
-                <button class="btn-create-barangay" id="createBarangayBtn">
-                    <i class="fa-solid fa-plus"></i> Create New Barangay
-                </button>
-            </div>
-            <div id="barangayList" class="barangay-grid">
-                <!-- Barangay items will be loaded here -->
-            </div>
-        </section>
-
-        <!-- CITIZENS TABLE -->
-        <section class="table-container">
-            <div class="table-header">
-                <div>
-                    <h2>Citizens List</h2>
-                    <span>Manage and view all registered citizens in the barangay.</span>
-                </div>
-                <div class="table-tools">
-                    <input type="text" placeholder="Search by name, address or ID..." />
-                    <select id="barangayFilter">
-                        <option value="all">All Barangay</option>
-                    </select>
-                    <select>
-                        <option>All</option>
-                    </select>
-                    <button id="openModalBtn">
-                        <i class="fa-solid fa-plus"></i>
-                        Add Citizen
-                    </button>
-                </div>
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Full Name</th>
-                        <th>Age</th>
-                        <th>Gender</th>
-                        <th>Address</th>
-                        <th>Contact Number</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="citizenTable">
-                    <tr>
-                        <td colspan="8" class="coming">
-                            — No citizens registered yet —
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <!-- PREVIEW PAGES -->
-        <section class="preview-pages">
-            <div class="preview-card"><h3>Dashboard</h3><p>Coming Soon...</p><button>Put the function code of this page like the design etc...</button></div>
-            <div class="preview-card"><h3>Citizens</h3><p>Coming Soon...</p><button>Put the function code of this page like the design etc...</button></div>
-            <div class="preview-card"><h3>Households</h3><p>Coming Soon...</p><button>Put the function code of this page like the design etc...</button></div>
-            <div class="preview-card"><h3>Officials</h3><p>Coming Soon...</p><button>Put the function code of this page like the design etc...</button></div>
-            <div class="preview-card"><h3>Services</h3><p>Coming Soon...</p><button>Put the function code of this page like the design etc...</button></div>
-            <div class="preview-card"><h3>Certificates</h3><p>Coming Soon...</p><button>Put the function code of this page like the design etc...</button></div>
-        </section>
-
-        <footer>© 2024 B.E.S.T Barangay Electronic System. All Rights Reserved.</footer>
-
-    </main>
+    <section class="preview-pages">
+      <div class="preview-card"><h3>Dashboard</h3><p>Coming Soon...</p><button>Put the function code of this page like the design etc...</button></div>
+      <div class="preview-card"><h3>Citizens</h3><p>Coming Soon...</p><button>Put the function code of this page like the design etc...</button></div>
+      <div class="preview-card"><h3>Households</h3><p>Coming Soon...</p><button>Put the function code of this page like the design etc...</button></div>
+      <div class="preview-card"><h3>Officials</h3><p>Coming Soon...</p><button>Put the function code of this page like the design etc...</button></div>
+      <div class="preview-card"><h3>Services</h3><p>Coming Soon...</p><button>Put the function code of this page like the design etc...</button></div>
+      <div class="preview-card"><h3>Certificates</h3><p>Coming Soon...</p><button>Put the function code of this page like the design etc...</button></div>
+    </section>
+    <footer>© 2024 B.E.S.T Barangay Electronic System. All Rights Reserved.</footer>
+  </main>
 </div>
 
-<!-- ===== CITIZEN MODAL WITH ENHANCED SCROLL FEATURE ===== -->
+<!-- ===== CITIZEN MODAL ===== -->
 <div id="citizenModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2><i class="fa-solid fa-user-plus"></i> Add New Citizen</h2>
-            <button class="close-modal" id="closeModalBtn">&times;</button>
+  <div class="modal-content">
+    <div class="modal-header"><h2><i class="fa-solid fa-user-plus"></i> Add New Citizen</h2><button class="close-modal" id="closeModalBtn">&times;</button></div>
+    <div class="scroll-indicator show" id="scrollIndicator"><i class="fa-solid fa-arrows-up-down"></i> Scroll down to complete all fields</div>
+    <div class="form-scroll-container" id="formScrollContainer">
+      <form id="citizenForm">
+        <div class="form-group"><label>Full Name <span class="required">*</span></label><input type="text" id="fullName" placeholder="Enter full name" required /></div>
+        <div class="form-group"><label>Age <span class="required">*</span></label><input type="number" id="age" placeholder="Enter age" required min="0" max="150" /></div>
+        <div class="form-group"><label>Gender <span class="required">*</span></label><select id="gender" required><option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option></select></div>
+        <div class="form-group"><label>Address <span class="required">*</span></label><input type="text" id="address" placeholder="Enter address" required /></div>
+        <div class="form-group"><label>Contact <span class="required">*</span></label><input type="text" id="contact" placeholder="Enter contact number" required /></div>
+        <div class="form-group"><label>Email</label><input type="email" id="email" placeholder="Enter email (optional)" /></div>
+        <div class="form-group"><label>Birth Date</label><input type="date" id="birthdate" /></div>
+        <div class="form-group"><label>Civil Status</label><select id="civilStatus"><option value="">Select</option><option value="Single">Single</option><option value="Married">Married</option><option value="Divorced">Divorced</option><option value="Widowed">Widowed</option></select></div>
+        <div class="form-group"><label>Occupation</label><input type="text" id="occupation" placeholder="Enter occupation (optional)" /></div>
+
+        <!-- NEW CHECKS: Senior Citizen & Voter -->
+        <div class="form-group">
+          <label><span class="required">*</span> Is this a Senior Citizen? (60+ years)</label>
+          <select id="isSenior" required>
+            <option value="">Select</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+          <span class="field-hint">Only select "Yes" if age is 60 or above.</span>
         </div>
-        
-        <div class="scroll-indicator show" id="scrollIndicator">
-            <i class="fa-solid fa-arrows-up-down"></i> Scroll down to complete all fields
+        <div class="form-group">
+          <label><span class="required">*</span> Is this a Registered Voter? (18+ years)</label>
+          <select id="isVoter" required>
+            <option value="">Select</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+          <span class="field-hint">Only select "Yes" if age is 18 or above.</span>
         </div>
-        
-        <div class="form-scroll-container" id="formScrollContainer">
-            <form id="citizenForm">
-                <div class="form-group">
-                    <label for="fullName">Full Name <span class="required">*</span></label>
-                    <input type="text" id="fullName" placeholder="Enter full name (e.g., Juan Dela Cruz)" required />
-                    <span class="field-hint">Enter the complete legal name of the citizen</span>
-                </div>
-                
-                <div class="form-group">
-                    <label for="age">Age <span class="required">*</span></label>
-                    <input type="number" id="age" placeholder="Enter age" required min="0" max="150" />
-                    <span class="field-hint">Age must be between 0 and 150 years</span>
-                </div>
-                
-                <div class="form-group">
-                    <label for="gender">Gender <span class="required">*</span></label>
-                    <select id="gender" required>
-                        <option value="">Select gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="address">Address <span class="required">*</span></label>
-                    <input type="text" id="address" placeholder="Enter address (e.g., Purok 1, Barangay North)" required />
-                    <span class="field-hint">Include street, purok, or specific location</span>
-                </div>
-                
-                <div class="form-group">
-                    <label for="contact">Contact Number <span class="required">*</span></label>
-                    <input type="text" id="contact" placeholder="Enter contact number (e.g., 09XX-XXX-XXXX)" required />
-                    <span class="field-hint">Enter a valid 11-digit mobile number</span>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" placeholder="Enter email address (optional)" />
-                    <span class="field-hint">Optional: For official communications</span>
-                </div>
-                
-                <div class="form-group">
-                    <label for="birthdate">Birth Date</label>
-                    <input type="date" id="birthdate" />
-                    <span class="field-hint">Optional: Format MM/DD/YYYY</span>
-                </div>
-                
-                <div class="form-group">
-                    <label for="civilStatus">Civil Status</label>
-                    <select id="civilStatus">
-                        <option value="">Select civil status</option>
-                        <option value="Single">Single</option>
-                        <option value="Married">Married</option>
-                        <option value="Divorced">Divorced</option>
-                        <option value="Widowed">Widowed</option>
-                        <option value="Separated">Separated</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="occupation">Occupation</label>
-                    <input type="text" id="occupation" placeholder="Enter occupation (optional)" />
-                    <span class="field-hint">Optional: Current job or profession</span>
-                </div>
-                
-                <div class="form-group">
-                    <label for="status">Status</label>
-                    <select id="status">
-                        <option value="Active">Active</option>
-                        <option value="Inactive">Inactive</option>
-                        <option value="Pending">Pending</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="citizenBarangay">Barangay <span class="required">*</span></label>
-                    <select id="citizenBarangay" required>
-                        <option value="">Select Barangay</option>
-                    </select>
-                    <span class="field-hint">Select the barangay where the citizen resides</span>
-                </div>
-                
-                <div class="form-group">
-                    <label for="additionalInfo">Additional Information</label>
-                    <textarea id="additionalInfo" placeholder="Any additional information about the citizen (e.g., health conditions, special needs, etc.)" rows="3"></textarea>
-                    <span class="field-hint">Optional: Add any relevant notes or remarks</span>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="button" class="btn-cancel" id="cancelBtn"><i class="fa-solid fa-times"></i> Cancel</button>
-                    <button type="submit" class="btn-submit"><i class="fa-solid fa-check"></i> Register Citizen</button>
-                </div>
-            </form>
-        </div>
+
+        <div class="form-group"><label>Status</label><select id="status"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div>
+        <div class="form-group"><label>Barangay <span class="required">*</span></label><select id="citizenBarangay" required><option value="">Select Barangay</option></select></div>
+        <div class="form-group"><label>Additional Info</label><textarea id="additionalInfo" rows="3" placeholder="Any notes..."></textarea></div>
+        <div class="form-actions"><button type="button" class="btn-cancel" id="cancelBtn"><i class="fa-solid fa-times"></i> Cancel</button><button type="submit" class="btn-submit"><i class="fa-solid fa-check"></i> Register Citizen</button></div>
+      </form>
     </div>
+  </div>
 </div>
 
-<!-- ===== BARANGAY CREATE MODAL ===== -->
+<!-- ===== BARANGAY MODAL ===== -->
 <div id="barangayModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2><i class="fa-solid fa-building"></i> Create New Barangay</h2>
-            <button class="close-modal" id="closeBarangayModal">&times;</button>
-        </div>
-        <div class="form-scroll-container">
-            <form id="barangayForm">
-                <div class="form-group">
-                    <label for="barangayName">Barangay Name <span class="required">*</span></label>
-                    <input type="text" id="barangayName" placeholder="e.g., North Poblacion" required />
-                </div>
-                <div class="form-group">
-                    <label for="barangayCode">Barangay Code <span class="required">*</span></label>
-                    <input type="text" id="barangayCode" placeholder="e.g., BRGY-001" required />
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn-cancel" id="cancelBarangayBtn"><i class="fa-solid fa-times"></i> Cancel</button>
-                    <button type="submit" class="btn-submit"><i class="fa-solid fa-check"></i> Create Barangay</button>
-                </div>
-            </form>
-        </div>
+  <div class="modal-content">
+    <div class="modal-header"><h2><i class="fa-solid fa-building"></i> Create New Barangay</h2><button class="close-modal" id="closeBarangayModal">&times;</button></div>
+    <div class="form-scroll-container">
+      <form id="barangayForm">
+        <div class="form-group"><label>Barangay Name <span class="required">*</span></label><input type="text" id="barangayName" placeholder="e.g., North Poblacion" required /></div>
+        <div class="form-group"><label>Barangay Code <span class="required">*</span></label><input type="text" id="barangayCode" placeholder="e.g., BRGY-001" required /></div>
+        <div class="form-actions"><button type="button" class="btn-cancel" id="cancelBarangayBtn"><i class="fa-solid fa-times"></i> Cancel</button><button type="submit" class="btn-submit"><i class="fa-solid fa-check"></i> Create Barangay</button></div>
+      </form>
     </div>
+  </div>
 </div>
 
-<!-- ===== FULLY FUNCTIONAL JAVASCRIPT ===== -->
 <script>
-    (function() {
-        // ----- INITIALIZE DEFAULT BARANGAYS IF NONE EXIST -----
-        function initializeDefaultBarangays() {
-            try {
-                const stored = localStorage.getItem('barangayData');
-                if (!stored || stored === '[]') {
-                    const defaultBarangays = [
-                        { name: "North Poblacion", code: "BRGY-001" },
-                        { name: "South Poblacion", code: "BRGY-002" },
-                        { name: "East District", code: "BRGY-003" },
-                        { name: "West District", code: "BRGY-004" },
-                        { name: "Central Poblacion", code: "BRGY-005" }
-                    ];
-                    localStorage.setItem('barangayData', JSON.stringify(defaultBarangays));
-                    
-                    defaultBarangays.forEach(b => {
-                        if (!localStorage.getItem('citizenData_' + b.name)) {
-                            localStorage.setItem('citizenData_' + b.name, JSON.stringify([]));
-                        }
-                    });
-                    
-                    return defaultBarangays;
-                }
-                return JSON.parse(stored);
-            } catch (e) {
-                console.error('Error initializing barangays:', e);
-                const defaultBarangays = [
-                    { name: "North Poblacion", code: "BRGY-001" },
-                    { name: "South Poblacion", code: "BRGY-002" }
-                ];
-                localStorage.setItem('barangayData', JSON.stringify(defaultBarangays));
-                return defaultBarangays;
-            }
+(function() {
+  // ----- GLOBAL STATE (stored in localStorage for cross-device sync) -----
+  let citizens = [];
+  let barangays = [];
+
+  // ----- DOM REFS -----
+  const citizenTable = document.getElementById('citizenTable');
+  const totalCitizensEl = document.getElementById('totalCitizens');
+  const seniorCitizensEl = document.getElementById('seniorCitizens');
+  const registeredVotersEl = document.getElementById('registeredVoters');
+  const activeCasesEl = document.getElementById('activeCases'); // not used in logic, placeholder
+  const totalHouseholdsEl = document.getElementById('totalHouseholds'); // placeholder
+
+  // ----- LOAD DATA from localStorage (same across devices if same browser) -----
+  function loadData() {
+    try {
+      const storedBarangays = localStorage.getItem('barangayData');
+      if (storedBarangays) {
+        barangays = JSON.parse(storedBarangays);
+      } else {
+        // default barangays
+        barangays = [
+          { name: "North Poblacion", code: "BRGY-001" },
+          { name: "South Poblacion", code: "BRGY-002" },
+          { name: "East District", code: "BRGY-003" },
+          { name: "West District", code: "BRGY-004" },
+          { name: "Central Poblacion", code: "BRGY-005" }
+        ];
+        saveBarangays();
+      }
+
+      const storedCitizens = localStorage.getItem('citizenData');
+      if (storedCitizens) {
+        citizens = JSON.parse(storedCitizens);
+      } else {
+        citizens = [];
+        saveCitizens();
+      }
+    } catch (e) {
+      console.warn('Data load error, resetting.', e);
+      barangays = [
+        { name: "North Poblacion", code: "BRGY-001" },
+        { name: "South Poblacion", code: "BRGY-002" }
+      ];
+      citizens = [];
+      saveBarangays();
+      saveCitizens();
+    }
+  }
+
+  function saveBarangays() {
+    localStorage.setItem('barangayData', JSON.stringify(barangays));
+  }
+  function saveCitizens() {
+    localStorage.setItem('citizenData', JSON.stringify(citizens));
+  }
+
+  // ----- RENDER FUNCTIONS -----
+  function renderBarangays() {
+    const container = document.getElementById('barangayList');
+    if (!container) return;
+    if (barangays.length === 0) {
+      container.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:#94a3b8;"><i class="fa-solid fa-building" style="font-size:2rem;display:block;margin-bottom:0.5rem;"></i>No barangays created yet. Click "Create New Barangay" to add one.</div>`;
+      return;
+    }
+    container.innerHTML = barangays.map((b, idx) => `
+      <div class="barangay-item">
+        <div class="info"><span class="name">${b.name}</span><span class="code">${b.code}</span></div>
+        <div class="actions">
+          <button onclick="window.deleteBarangay(${idx})" title="Delete"><i class="fa-solid fa-trash" style="color:#dc2626;"></i></button>
+          <button onclick="window.viewBarangayData('${b.name}')" title="View Citizens"><i class="fa-solid fa-users" style="color:#0b2b4a;"></i></button>
+        </div>
+      </div>
+    `).join('');
+    updateBarangayFilter();
+    updateCitizenBarangaySelect();
+  }
+
+  function renderCitizens(filter = 'all', search = '') {
+    let list = citizens;
+    if (filter !== 'all') {
+      list = list.filter(c => c.barangay === filter);
+    }
+    if (search.trim()) {
+      const s = search.trim().toLowerCase();
+      list = list.filter(c => 
+        c.fullName.toLowerCase().includes(s) || 
+        c.address.toLowerCase().includes(s) || 
+        c.id.toLowerCase().includes(s)
+      );
+    }
+    if (list.length === 0) {
+      citizenTable.innerHTML = `<tr><td colspan="8" class="coming">— No citizens registered yet —</td></tr>`;
+      updateStats();
+      return;
+    }
+    citizenTable.innerHTML = list.map(c => `
+      <tr>
+        <td>${c.id}</td>
+        <td>${c.fullName}</td>
+        <td>${c.age}</td>
+        <td>${c.gender}</td>
+        <td>${c.address}</td>
+        <td>${c.contact}</td>
+        <td>${c.status}</td>
+        <td>
+          <button title="View" onclick="alert('Viewing ${c.fullName}')">👁</button>
+          <button title="Delete" onclick="window.deleteCitizen('${c.id}')">🗑</button>
+        </td>
+      </tr>
+    `).join('');
+    updateStats();
+  }
+
+  function updateStats() {
+    const total = citizens.length;
+    const seniorCount = citizens.filter(c => c.isSenior === 'Yes').length;
+    const voterCount = citizens.filter(c => c.isVoter === 'Yes').length;
+    totalCitizensEl.textContent = total;
+    seniorCitizensEl.textContent = seniorCount;
+    registeredVotersEl.textContent = voterCount;
+    // households and active cases are placeholders – set to 0
+    totalHouseholdsEl.textContent = '0';
+    activeCasesEl.textContent = '0';
+  }
+
+  // ----- FILTER & SEARCH -----
+  function updateBarangayFilter() {
+    const filter = document.getElementById('barangayFilter');
+    const current = filter.value;
+    filter.innerHTML = '<option value="all">All Barangay</option>';
+    barangays.forEach(b => {
+      const opt = document.createElement('option');
+      opt.value = b.name;
+      opt.textContent = b.name + ' (' + b.code + ')';
+      filter.appendChild(opt);
+    });
+    if (barangays.some(b => b.name === current)) filter.value = current;
+    else filter.value = 'all';
+  }
+
+  function updateCitizenBarangaySelect() {
+    const sel = document.getElementById('citizenBarangay');
+    const current = sel.value;
+    sel.innerHTML = '<option value="">Select Barangay</option>';
+    barangays.forEach(b => {
+      const opt = document.createElement('option');
+      opt.value = b.name;
+      opt.textContent = b.name + ' (' + b.code + ')';
+      sel.appendChild(opt);
+    });
+    if (barangays.some(b => b.name === current)) sel.value = current;
+  }
+
+  // ----- DELETE FUNCTIONS (exposed globally) -----
+  window.deleteBarangay = function(index) {
+    if (index < 0 || index >= barangays.length) return;
+    const name = barangays[index].name;
+    if (confirm(`Delete "${name}"? This will also remove all its citizens.`)) {
+      barangays.splice(index, 1);
+      citizens = citizens.filter(c => c.barangay !== name);
+      saveBarangays();
+      saveCitizens();
+      renderBarangays();
+      renderCitizens(document.getElementById('barangayFilter').value, document.getElementById('searchInput').value);
+    }
+  };
+
+  window.deleteCitizen = function(id) {
+    if (!id) return;
+    if (confirm('Delete this citizen?')) {
+      citizens = citizens.filter(c => c.id !== id);
+      saveCitizens();
+      renderCitizens(document.getElementById('barangayFilter').value, document.getElementById('searchInput').value);
+    }
+  };
+
+  window.viewBarangayData = function(name) {
+    const list = citizens.filter(c => c.barangay === name);
+    if (list.length === 0) { alert(`No citizens in "${name}".`); return; }
+    let msg = `Citizens in "${name}":\n\n`;
+    list.forEach((c, i) => { msg += `${i+1}. ${c.fullName} (${c.age}) - ${c.address}\n`; });
+    alert(msg);
+  };
+
+  // ----- MODAL LOGIC -----
+  const citizenModal = document.getElementById('citizenModal');
+  const barangayModal = document.getElementById('barangayModal');
+  const openBtn = document.getElementById('openModalBtn');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const citizenForm = document.getElementById('citizenForm');
+
+  // Barangay modal
+  const createBarangayBtn = document.getElementById('createBarangayBtn');
+  const closeBarangayModal = document.getElementById('closeBarangayModal');
+  const cancelBarangayBtn = document.getElementById('cancelBarangayBtn');
+  const barangayForm = document.getElementById('barangayForm');
+
+  function openCitizenModal() {
+    if (barangays.length === 0) { alert('Please create a barangay first.'); return; }
+    citizenModal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    updateCitizenBarangaySelect();
+    // reset form
+    citizenForm.reset();
+    document.getElementById('isSenior').value = '';
+    document.getElementById('isVoter').value = '';
+    // check scroll
+    setTimeout(checkScrollNeeded, 200);
+  }
+  function closeCitizenModal() {
+    citizenModal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    citizenForm.reset();
+  }
+  function openBarangayModalFunc() {
+    barangayModal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    barangayForm.reset();
+  }
+  function closeBarangayModalFunc() {
+    barangayModal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    barangayForm.reset();
+  }
+
+  openBtn.addEventListener('click', openCitizenModal);
+  closeModalBtn.addEventListener('click', closeCitizenModal);
+  cancelBtn.addEventListener('click', closeCitizenModal);
+  createBarangayBtn.addEventListener('click', openBarangayModalFunc);
+  closeBarangayModal.addEventListener('click', closeBarangayModalFunc);
+  cancelBarangayBtn.addEventListener('click', closeBarangayModalFunc);
+  window.addEventListener('click', function(e) {
+    if (e.target === citizenModal) closeCitizenModal();
+    if (e.target === barangayModal) closeBarangayModalFunc();
+  });
+
+  // ----- SCROLL INDICATOR -----
+  const scrollContainer = document.getElementById('formScrollContainer');
+  const scrollIndicator = document.getElementById('scrollIndicator');
+  function checkScrollNeeded() {
+    if (!scrollContainer || !scrollIndicator) return;
+    if (scrollContainer.scrollHeight > scrollContainer.clientHeight) {
+      scrollIndicator.classList.add('show');
+    } else {
+      scrollIndicator.classList.remove('show');
+    }
+  }
+  if (scrollContainer) {
+    scrollContainer.addEventListener('scroll', function() {
+      scrollIndicator.classList.remove('show');
+    });
+    window.addEventListener('resize', checkScrollNeeded);
+  }
+
+  // ----- FORM VALIDATION: Senior & Voter age checks -----
+  const ageInput = document.getElementById('age');
+  const isSeniorSelect = document.getElementById('isSenior');
+  const isVoterSelect = document.getElementById('isVoter');
+
+  function validateSeniorVoter() {
+    const age = parseInt(ageInput.value);
+    if (!isNaN(age)) {
+      // Senior: if age < 60, disable "Yes"
+      if (age < 60) {
+        if (isSeniorSelect.value === 'Yes') {
+          alert('Senior Citizen requires age 60 or above. Please select "No" or correct the age.');
+          isSeniorSelect.value = '';
         }
-
-        // ----- LOAD BARANGAY DATA -----
-        let barangays = initializeDefaultBarangays();
-
-        // ----- SAVE BARANGAY DATA -----
-        function saveBarangays() {
-            try {
-                localStorage.setItem('barangayData', JSON.stringify(barangays));
-            } catch (e) {
-                console.error('Error saving barangays:', e);
-            }
+      }
+      // Voter: if age < 18, disable "Yes"
+      if (age < 18) {
+        if (isVoterSelect.value === 'Yes') {
+          alert('Registered Voter requires age 18 or above. Please select "No" or correct the age.');
+          isVoterSelect.value = '';
         }
+      }
+    }
+  }
 
-        // ----- RENDER BARANGAY LIST -----
-        function renderBarangays() {
-            const container = document.getElementById('barangayList');
-            if (!container) return;
+  ageInput.addEventListener('change', validateSeniorVoter);
+  ageInput.addEventListener('input', validateSeniorVoter);
+  isSeniorSelect.addEventListener('change', function() {
+    const age = parseInt(ageInput.value);
+    if (this.value === 'Yes' && (isNaN(age) || age < 60)) {
+      alert('Senior Citizen requires age 60 or above.');
+      this.value = '';
+    }
+  });
+  isVoterSelect.addEventListener('change', function() {
+    const age = parseInt(ageInput.value);
+    if (this.value === 'Yes' && (isNaN(age) || age < 18)) {
+      alert('Registered Voter requires age 18 or above.');
+      this.value = '';
+    }
+  });
 
-            if (barangays.length === 0) {
-                container.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #94a3b8;">
-                        <i class="fa-solid fa-building" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
-                        No barangays created yet. Click "Create New Barangay" to add one.
-                    </div>
-                `;
-                return;
-            }
+  // ----- SUBMIT CITIZEN FORM -----
+  citizenForm.addEventListener('submit', function(e) {
+    e.preventDefault();
 
-            container.innerHTML = barangays.map((barangay, index) => `
-                <div class="barangay-item">
-                    <div class="info">
-                        <span class="name">${barangay.name}</span>
-                        <span class="code">${barangay.code}</span>
-                    </div>
-                    <div class="actions">
-                        <button onclick="window.deleteBarangay(${index})" title="Delete Barangay">
-                            <i class="fa-solid fa-trash" style="color: #dc2626;"></i>
-                        </button>
-                        <button onclick="window.viewBarangayData('${barangay.name}')" title="View Citizens">
-                            <i class="fa-solid fa-users" style="color: #0b2b4a;"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
+    const fullName = document.getElementById('fullName').value.trim();
+    const age = parseInt(document.getElementById('age').value);
+    const gender = document.getElementById('gender').value;
+    const address = document.getElementById('address').value.trim();
+    const contact = document.getElementById('contact').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const birthdate = document.getElementById('birthdate').value;
+    const civilStatus = document.getElementById('civilStatus').value;
+    const occupation = document.getElementById('occupation').value.trim();
+    const status = document.getElementById('status').value;
+    const barangay = document.getElementById('citizenBarangay').value;
+    const additionalInfo = document.getElementById('additionalInfo').value.trim();
+    const isSenior = document.getElementById('isSenior').value;
+    const isVoter = document.getElementById('isVoter').value;
 
-        // ----- DELETE BARANGAY -----
-        window.deleteBarangay = function(index) {
-            if (index < 0 || index >= barangays.length) return;
-            const name = barangays[index].name;
-            if (confirm(`Are you sure you want to delete "${name}" barangay?`)) {
-                barangays.splice(index, 1);
-                localStorage.removeItem('citizenData_' + name);
-                saveBarangays();
-                renderBarangays();
-                updateBarangayFilter();
-                updateCitizenBarangaySelect();
-                updateTableByFilter();
-                alert(`✅ Barangay "${name}" deleted successfully.`);
-            }
-        };
+    // Validations
+    if (!fullName) { alert('Full Name is required.'); return; }
+    if (isNaN(age) || age < 0 || age > 150) { alert('Please enter a valid age (0-150).'); return; }
+    if (!gender) { alert('Please select gender.'); return; }
+    if (!address) { alert('Address is required.'); return; }
+    if (!contact) { alert('Contact number is required.'); return; }
+    if (!barangay) { alert('Please select a barangay.'); return; }
+    if (!isSenior) { alert('Please select if the citizen is a Senior Citizen.'); return; }
+    if (!isVoter) { alert('Please select if the citizen is a Registered Voter.'); return; }
+    // Age checks for Senior and Voter
+    if (isSenior === 'Yes' && age < 60) {
+      alert('Senior Citizen requires age 60 or above.');
+      return;
+    }
+    if (isVoter === 'Yes' && age < 18) {
+      alert('Registered Voter requires age 18 or above.');
+      return;
+    }
 
-        // ----- VIEW BARANGAY DATA -----
-        window.viewBarangayData = function(name) {
-            const citizens = JSON.parse(localStorage.getItem('citizenData_' + name) || '[]');
-            if (citizens.length === 0) {
-                alert(`📋 No citizens registered in "${name}" yet.`);
-            } else {
-                let msg = `📋 Citizens in "${name}":\n\n`;
-                citizens.forEach((c, i) => {
-                    msg += `${i+1}. ${c.fullName} (${c.age}) - ${c.address}\n`;
-                });
-                alert(msg);
-            }
-        };
+    const id = 'BEST-' + Date.now().toString().slice(-6) + Math.random().toString(36).substring(2,4).toUpperCase();
+    const citizen = {
+      id,
+      fullName,
+      age,
+      gender,
+      address,
+      contact,
+      email: email || 'N/A',
+      birthdate: birthdate || 'N/A',
+      civilStatus: civilStatus || 'N/A',
+      occupation: occupation || 'N/A',
+      status,
+      barangay,
+      additionalInfo: additionalInfo || 'N/A',
+      isSenior,
+      isVoter
+    };
 
-        // ----- UPDATE BARANGAY FILTER DROPDOWN -----
-        function updateBarangayFilter() {
-            const filter = document.getElementById('barangayFilter');
-            if (!filter) return;
-            
-            const currentValue = filter.value;
-            filter.innerHTML = '<option value="all">All Barangay</option>';
-            barangays.forEach(b => {
-                const option = document.createElement('option');
-                option.value = b.name;
-                option.textContent = b.name + ' (' + b.code + ')';
-                filter.appendChild(option);
-            });
-            if (currentValue && barangays.some(b => b.name === currentValue)) {
-                filter.value = currentValue;
-            }
-        }
+    citizens.push(citizen);
+    saveCitizens();
+    renderCitizens(document.getElementById('barangayFilter').value, document.getElementById('searchInput').value);
+    closeCitizenModal();
+    alert(`✅ Citizen "${fullName}" added to "${barangay}" successfully!`);
+  });
 
-        // ----- UPDATE CITIZEN BARANGAY SELECT -----
-        function updateCitizenBarangaySelect() {
-            const select = document.getElementById('citizenBarangay');
-            if (!select) return;
-            
-            const currentValue = select.value;
-            select.innerHTML = '<option value="">Select Barangay</option>';
-            barangays.forEach(b => {
-                const option = document.createElement('option');
-                option.value = b.name;
-                option.textContent = b.name + ' (' + b.code + ')';
-                select.appendChild(option);
-            });
-            if (currentValue && barangays.some(b => b.name === currentValue)) {
-                select.value = currentValue;
-            }
-        }
+  // ----- SUBMIT BARANGAY FORM -----
+  barangayForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('barangayName').value.trim();
+    const code = document.getElementById('barangayCode').value.trim();
+    if (!name || !code) { alert('Please fill all fields.'); return; }
+    if (barangays.some(b => b.name.toLowerCase() === name.toLowerCase())) {
+      alert('Barangay name already exists.'); return;
+    }
+    if (barangays.some(b => b.code.toLowerCase() === code.toLowerCase())) {
+      alert('Barangay code already exists.'); return;
+    }
+    barangays.push({ name, code });
+    saveBarangays();
+    renderBarangays();
+    closeBarangayModalFunc();
+    alert(`✅ Barangay "${name}" created.`);
+  });
 
-        // ----- UPDATE TABLE BASED ON FILTER -----
-        function updateTableByFilter() {
-            const filter = document.getElementById('barangayFilter');
-            if (!filter) return;
-            
-            const selected = filter.value;
-            if (selected === 'all') {
-                let allCitizens = [];
-                barangays.forEach(b => {
-                    const citizens = JSON.parse(localStorage.getItem('citizenData_' + b.name) || '[]');
-                    allCitizens = allCitizens.concat(citizens);
-                });
-                updateTable(allCitizens);
-            } else {
-                const citizens = JSON.parse(localStorage.getItem('citizenData_' + selected) || '[]');
-                updateTable(citizens);
-            }
-        }
+  // ----- SEARCH & FILTER -----
+  document.getElementById('searchInput').addEventListener('input', function() {
+    renderCitizens(document.getElementById('barangayFilter').value, this.value);
+  });
+  document.getElementById('barangayFilter').addEventListener('change', function() {
+    renderCitizens(this.value, document.getElementById('searchInput').value);
+  });
 
-        // ----- UPDATE TABLE -----
-        function updateTable(citizens) {
-            const tbody = document.getElementById('citizenTable');
-            if (!tbody) return;
+  // ----- NOTIFICATIONS / PLACEHOLDERS -----
+  document.querySelector('.notification')?.addEventListener('click', function(e) {
+    e.stopPropagation(); alert('🔔 You have 3 notifications.');
+  });
+  document.querySelector('.profile')?.addEventListener('click', function() {
+    alert('👤 Admin profile');
+  });
+  document.querySelectorAll('.top-menu a, .side-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (this.classList.contains('active')) alert('🏠 You are on the Dashboard.');
+      else alert('📄 This section is coming soon.');
+    });
+  });
+  document.querySelectorAll('.preview-card button').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation(); alert('📌 This page is under development.');
+    });
+  });
 
-            if (!citizens || citizens.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="8" class="coming">
-                            — No citizens registered yet —
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
+  // ----- INIT -----
+  loadData();
+  renderBarangays();
+  renderCitizens('all', '');
+  updateStats();
 
-            tbody.innerHTML = citizens.map(c => `
-                <tr>
-                    <td>${c.id || 'N/A'}</td>
-                    <td>${c.fullName || 'N/A'}</td>
-                    <td>${c.age || 'N/A'}</td>
-                    <td>${c.gender || 'N/A'}</td>
-                    <td>${c.address || 'N/A'}</td>
-                    <td>${c.contact || 'N/A'}</td>
-                    <td>${c.status || 'Active'}</td>
-                    <td>
-                        <button title="View" onclick="alert('Viewing ${c.fullName}')">👁</button>
-                        <button title="Edit" onclick="alert('Editing ${c.fullName}')">✏</button>
-                        <button title="Delete" onclick="window.deleteCitizen('${c.id}')">🗑</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        // ----- DELETE CITIZEN -----
-        window.deleteCitizen = function(id) {
-            if (!id) return;
-            
-            for (let b of barangays) {
-                const citizens = JSON.parse(localStorage.getItem('citizenData_' + b.name) || '[]');
-                const index = citizens.findIndex(c => c.id === id);
-                if (index !== -1) {
-                    if (confirm(`Are you sure you want to delete this citizen?`)) {
-                        citizens.splice(index, 1);
-                        localStorage.setItem('citizenData_' + b.name, JSON.stringify(citizens));
-                        updateTableByFilter();
-                        alert('✅ Citizen deleted successfully.');
-                    }
-                    return;
-                }
-            }
-        };
-
-        // ----- SCROLL INDICATOR LOGIC -----
-        const formScrollContainer = document.getElementById('formScrollContainer');
-        const scrollIndicator = document.getElementById('scrollIndicator');
-
-        if (formScrollContainer && scrollIndicator) {
-            function checkScrollNeeded() {
-                const contentHeight = formScrollContainer.scrollHeight;
-                const containerHeight = formScrollContainer.clientHeight;
-                if (contentHeight > containerHeight) {
-                    scrollIndicator.classList.add('show');
-                } else {
-                    scrollIndicator.classList.remove('show');
-                }
-            }
-
-            setTimeout(checkScrollNeeded, 100);
-            window.addEventListener('resize', checkScrollNeeded);
-
-            formScrollContainer.addEventListener('scroll', function() {
-                scrollIndicator.classList.remove('show');
-            });
-        }
-
-        // ----- CREATE BARANGAY MODAL -----
-        const barangayModal = document.getElementById('barangayModal');
-        const createBarangayBtn = document.getElementById('createBarangayBtn');
-        const closeBarangayModal = document.getElementById('closeBarangayModal');
-        const cancelBarangayBtn = document.getElementById('cancelBarangayBtn');
-        const barangayForm = document.getElementById('barangayForm');
-
-        function openBarangayModal() {
-            barangayModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeBarangayModalFunc() {
-            barangayModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            barangayForm.reset();
-        }
-
-        if (createBarangayBtn) {
-            createBarangayBtn.addEventListener('click', openBarangayModal);
-        }
-        if (closeBarangayModal) {
-            closeBarangayModal.addEventListener('click', closeBarangayModalFunc);
-        }
-        if (cancelBarangayBtn) {
-            cancelBarangayBtn.addEventListener('click', closeBarangayModalFunc);
-        }
-
-        window.addEventListener('click', function(e) {
-            if (e.target === barangayModal) {
-                closeBarangayModalFunc();
-            }
-        });
-
-        // ----- SUBMIT BARANGAY FORM -----
-        if (barangayForm) {
-            barangayForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const name = document.getElementById('barangayName').value.trim();
-                const code = document.getElementById('barangayCode').value.trim();
-
-                if (!name) { alert('Please enter barangay name.'); return; }
-                if (!code) { alert('Please enter barangay code.'); return; }
-
-                if (barangays.some(b => b.name.toLowerCase() === name.toLowerCase())) {
-                    alert('⚠️ A barangay with this name already exists.');
-                    return;
-                }
-
-                if (barangays.some(b => b.code.toLowerCase() === code.toLowerCase())) {
-                    alert('⚠️ A barangay with this code already exists.');
-                    return;
-                }
-
-                barangays.push({ name, code });
-                saveBarangays();
-                localStorage.setItem('citizenData_' + name, JSON.stringify([]));
-                renderBarangays();
-                updateBarangayFilter();
-                updateCitizenBarangaySelect();
-                closeBarangayModalFunc();
-                
-                alert(`✅ Barangay "${name}" created successfully!`);
-            });
-        }
-
-        // ----- CITIZEN MODAL -----
-        const modal = document.getElementById('citizenModal');
-        const openBtn = document.getElementById('openModalBtn');
-        const closeBtn = document.getElementById('closeModalBtn');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const form = document.getElementById('citizenForm');
-
-        if (openBtn) {
-            openBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                if (barangays.length === 0) {
-                    alert('⚠️ Please create a barangay first before adding citizens.');
-                    return;
-                }
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-                updateCitizenBarangaySelect();
-                
-                setTimeout(() => {
-                    if (formScrollContainer) {
-                        const contentHeight = formScrollContainer.scrollHeight;
-                        const containerHeight = formScrollContainer.clientHeight;
-                        if (contentHeight > containerHeight) {
-                            scrollIndicator.classList.add('show');
-                        } else {
-                            scrollIndicator.classList.remove('show');
-                        }
-                    }
-                }, 200);
-            });
-        }
-
-        function closeModalFunc() {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            if (form) form.reset();
-            if (scrollIndicator) {
-                scrollIndicator.classList.remove('show');
-            }
-        }
-
-        if (closeBtn) closeBtn.addEventListener('click', closeModalFunc);
-        if (cancelBtn) cancelBtn.addEventListener('click', closeModalFunc);
-
-        window.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                closeModalFunc();
-            }
-        });
-
-        // ----- SUBMIT CITIZEN FORM -----
-        if (form) {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const fullname = document.getElementById('fullName').value.trim();
-                const age = document.getElementById('age').value.trim();
-                const gender = document.getElementById('gender').value;
-                const address = document.getElementById('address').value.trim();
-                const contact = document.getElementById('contact').value.trim();
-                const status = document.getElementById('status').value;
-                const selectedBarangay = document.getElementById('citizenBarangay').value;
-
-                if (!fullname) { alert('Please enter full name.'); return; }
-                if (!age || isNaN(age) || Number(age) < 0) { alert('Please enter a valid age.'); return; }
-                if (!gender) { alert('Please select gender.'); return; }
-                if (!address) { alert('Please enter address.'); return; }
-                if (!contact) { alert('Please enter contact number.'); return; }
-                if (!selectedBarangay) { alert('Please select a barangay.'); return; }
-
-                let citizens = JSON.parse(localStorage.getItem('citizenData_' + selectedBarangay) || '[]');
-                
-                const id = "BEST-" + Date.now().toString().slice(-6);
-                const citizen = {
-                    id: id,
-                    fullName: fullname,
-                    age: age,
-                    gender: gender,
-                    address: address,
-                    contact: contact,
-                    status: status,
-                    barangay: selectedBarangay
-                };
-
-                citizens.push(citizen);
-                localStorage.setItem('citizenData_' + selectedBarangay, JSON.stringify(citizens));
-
-                closeModalFunc();
-                updateTableByFilter();
-                alert(`✅ Citizen "${fullname}" added to "${selectedBarangay}" successfully!`);
-            });
-        }
-
-        // ----- FILTER BARANGAY -----
-        const barangayFilter = document.getElementById('barangayFilter');
-        if (barangayFilter) {
-            barangayFilter.addEventListener('change', updateTableByFilter);
-        }
-
-        // ----- SEARCH -----
-        const searchInput = document.querySelector('.table-tools input');
-        if (searchInput) {
-            searchInput.addEventListener('keyup', function(e) {
-                if (e.key === 'Enter') {
-                    const val = this.value.trim().toLowerCase();
-                    const filter = document.getElementById('barangayFilter');
-                    const selected = filter ? filter.value : 'all';
-                    
-                    let citizens = [];
-                    if (selected === 'all') {
-                        barangays.forEach(b => {
-                            const c = JSON.parse(localStorage.getItem('citizenData_' + b.name) || '[]');
-                            citizens = citizens.concat(c);
-                        });
-                    } else {
-                        citizens = JSON.parse(localStorage.getItem('citizenData_' + selected) || '[]');
-                    }
-                    
-                    if (val) {
-                        const filtered = citizens.filter(c => 
-                            c.fullName.toLowerCase().includes(val) ||
-                            c.address.toLowerCase().includes(val) ||
-                            (c.id && c.id.toLowerCase().includes(val))
-                        );
-                        updateTable(filtered);
-                        if (filtered.length === 0) {
-                            alert('🔍 No results found for: ' + val);
-                        }
-                    } else {
-                        updateTableByFilter();
-                    }
-                }
-            });
-        }
-
-        // ----- NOTIFICATION -----
-        document.querySelector('.notification')?.addEventListener('click', function(e) {
-            e.stopPropagation();
-            alert('🔔 You have 3 notifications.');
-        });
-
-        // ----- PROFILE -----
-        document.querySelector('.profile')?.addEventListener('click', function() {
-            alert('👤 Admin profile');
-        });
-
-        // ----- TOP MENU & SIDEBAR -----
-        document.querySelectorAll('.top-menu a, .side-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (this.classList.contains('active')) {
-                    alert('🏠 You are on the Dashboard.');
-                } else {
-                    alert('📄 This section is coming soon.');
-                }
-            });
-        });
-
-        // ----- PREVIEW CARD BUTTONS -----
-        document.querySelectorAll('.preview-card button').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                alert('📌 This page is under development.');
-            });
-        });
-
-        // ----- INITIALIZE -----
-        console.log('✅ B.E.S.T Barangay Electronic System is fully functional.');
-        
-        renderBarangays();
-        updateBarangayFilter();
-        updateCitizenBarangaySelect();
-        updateTableByFilter();
-
-    })();
+  console.log('✅ B.E.S.T system ready. Data stored in localStorage (sync across same browser).');
+})();
 </script>
-
 </body>
 </html>
