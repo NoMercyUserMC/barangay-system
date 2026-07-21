@@ -743,3 +743,9 @@ tbody tr:hover{
     padding:40px;
 
 }
+.system-name {
+    font-family: "Zen Dots", sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
