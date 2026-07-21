@@ -725,6 +725,7 @@
     <div class="barangay-title">
       <h2>B.E.S.T</h2>
       <span>Barangay Electronic System for Total Community Management</span>
+      <span>Developed by: Marc D. Namacpacan</span>
     </div>
   </div>
   <nav class="top-menu">
@@ -901,7 +902,7 @@
         <button>Open Certificates</button>
       </div>
     </section>
-    <footer>© 2024 B.E.S.T Barangay Electronic System. All Rights Reserved.</footer>
+    <footer>© 2026 B.E.S.T Barangay Electronic System. All Rights Reserved. Developed By: Marc D. Namacpacan</footer>
   </main>
 </div>
 
@@ -1064,18 +1065,52 @@
       if (storedBarangays) barangays = JSON.parse(storedBarangays);
       else {
         barangays = [
-          { name: "North Poblacion", code: "BRGY-001" },
-          { name: "South Poblacion", code: "BRGY-002" },
-          { name: "East District", code: "BRGY-003" },
-          { name: "West District", code: "BRGY-004" },
-          { name: "Central Poblacion", code: "BRGY-005" }
+          { name: "Anahawon", code: "BRGY-001" },
+          { name: "Base Camp", code: "BRGY-002" },
+          { name: "Bayabason", code: "BRGY-003" },
+          { name: "Camp I", code: "BRGY-004" },
+          { name: "Colambugan", code: "BRGY-005" },
+          { name: "Dagumba-an", code: "BRGY-006" },
+          { name: "Danggawan", code: "BRGY-007" },
+          { name: "Dologon", code: "BRGY-008" },
+          { name: "Kisanday", code: "BRGY-009" },
+          { name: "Kuya", code: "BRGY-010" },
+          { name: "La Roxas", code: "BRGY-011" },
+          { name: "Panadtalan", code: "BRGY-012" },
+          { name: "Panalsalan", code: "BRGY-013" },
+          { name: "North Poblacion", code: "BRGY-014" },
+          { name: "South Poblacion", code: "BRGY-015" },
+          { name: "San Miguel", code: "BRGY-016" },
+          { name: "San Roque", code: "BRGY-017" },
+          { name: "Tubigon", code: "BRGY-018" },
+          { name: "Bagongsilang", code: "BRGY-019" },
+          { name: "Kiharong", code: "BRGY-020" }
         ];
         saveToLocalStorage();
       }
     } catch (e) {
       console.error('Error loading from localStorage:', e);
       citizens = [];
-      barangays = [{ name: "North Poblacion", code: "BRGY-001" }, { name: "South Poblacion", code: "BRGY-002" }];
+      barangays = [{ name: "Anahawon", code: "BRGY-001" },
+          { name: "Base Camp", code: "BRGY-002" },
+          { name: "Bayabason", code: "BRGY-003" },
+          { name: "Camp I", code: "BRGY-004" },
+          { name: "Colambugan", code: "BRGY-005" },
+          { name: "Dagumba-an", code: "BRGY-006" },
+          { name: "Danggawan", code: "BRGY-007" },
+          { name: "Dologon", code: "BRGY-008" },
+          { name: "Kisanday", code: "BRGY-009" },
+          { name: "Kuya", code: "BRGY-010" },
+          { name: "La Roxas", code: "BRGY-011" },
+          { name: "Panadtalan", code: "BRGY-012" },
+          { name: "Panalsalan", code: "BRGY-013" },
+          { name: "North Poblacion", code: "BRGY-014" },
+          { name: "South Poblacion", code: "BRGY-015" },
+          { name: "San Miguel", code: "BRGY-016" },
+          { name: "San Roque", code: "BRGY-017" },
+          { name: "Tubigon", code: "BRGY-018" },
+          { name: "Bagongsilang", code: "BRGY-019" },
+          { name: "Kiharong", code: "BRGY-020" }];
     }
   }
 
