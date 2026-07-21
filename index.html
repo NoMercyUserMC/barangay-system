@@ -4,15 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>B.E.S.T Barangay Electronic System</title>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <!-- Font Awesome CDN - GitHub friendly -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" 
+          integrity="sha512-SnH6WKcxZsjUD3J6kFp8VvxIe0vMvM+JgH6A4T+aRzU8aN7J/qv+8NfqXeHcM6KJfTfJ+6P/tlHZb8J6E+Yg==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* ====== style.css (fully embedded) ====== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
         }
 
         body {
@@ -453,7 +455,7 @@
             padding: 2.5rem 0;
         }
 
-        /* Modal Form Styles with Scroll - Focused on Citizen Form */
+        /* Modal Form Styles with Scroll */
         .modal {
             display: none;
             position: fixed;
@@ -482,7 +484,6 @@
             overflow-y: auto;
         }
 
-        /* Custom scrollbar for modal content */
         .modal-content::-webkit-scrollbar {
             width: 8px;
         }
@@ -550,7 +551,6 @@
             transform: rotate(90deg);
         }
 
-        /* Scroll indicator for citizen form */
         .scroll-indicator {
             text-align: center;
             color: #0b2b4a;
@@ -577,7 +577,6 @@
             50% { transform: translateY(-5px); }
         }
 
-        /* Form scroll container for citizen form */
         .form-scroll-container {
             max-height: 55vh;
             overflow-y: auto;
@@ -585,7 +584,6 @@
             padding-bottom: 5px;
         }
 
-        /* Custom scrollbar for form container */
         .form-scroll-container::-webkit-scrollbar {
             width: 6px;
         }
@@ -661,7 +659,6 @@
             display: block;
         }
 
-        /* Form actions - sticky footer */
         .form-actions {
             display: flex;
             gap: 1rem;
@@ -711,7 +708,6 @@
             background: #e2e8f0;
         }
 
-        /* Barangay Management Section */
         .barangay-section {
             background: white;
             border-radius: 28px;
@@ -807,7 +803,6 @@
             box-shadow: 0 4px 12px rgba(11, 43, 74, 0.3);
         }
 
-        /* preview cards */
         .preview-pages {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
@@ -1003,10 +998,14 @@
             }
         }
 
-        /* Scrollbar for Firefox */
         .form-scroll-container {
             scrollbar-width: thin;
             scrollbar-color: #0b2b4a #f1f5f9;
+        }
+
+        /* GitHub Pages specific - prevent caching issues */
+        .github-pages-badge {
+            display: none;
         }
     </style>
 </head>
@@ -1016,7 +1015,11 @@
 <header class="topbar">
     <div class="top-left">
         <div class="logo">
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230b2b4a'/%3E%3Ctext x='12' y='55' font-family='Arial' font-size='18' fill='white' font-weight='bold'%3EBEST%3C/text%3E%3C/svg%3E" alt="BEST Logo" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="44" height="44">
+                <rect width="100" height="100" fill="#0b2b4a" rx="50"/>
+                <text x="50" y="55" font-family="Arial" font-size="20" fill="white" font-weight="bold" text-anchor="middle">B</text>
+                <text x="50" y="75" font-family="Arial" font-size="8" fill="#d6e3f0" text-anchor="middle">B.E.S.T</text>
+            </svg>
         </div>
         <div class="barangay-title">
             <h2>B.E.S.T</h2>
@@ -1035,7 +1038,10 @@
     <div class="top-right">
         <button class="notification"><i class="fa-solid fa-bell"></i><span>3</span></button>
         <div class="profile">
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='40' r='24' fill='%23cbd5e1'/%3E%3Ccircle cx='50' cy='90' r='34' fill='%23cbd5e1'/%3E%3C/svg%3E" alt="profile" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36">
+                <circle cx="50" cy="40" r="24" fill="#cbd5e1"/>
+                <circle cx="50" cy="90" r="34" fill="#cbd5e1"/>
+            </svg>
             <div><h4>Admin</h4><small>Administrator</small></div>
             <i class="fa-solid fa-angle-down"></i>
         </div>
@@ -1072,7 +1078,10 @@
                 <p>Barangay Electronic System for Total Community Management</p>
             </div>
             <div class="hero-right">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Crect width='200' height='80' fill='%23e9eff6' rx='16'/%3E%3Ctext x='20' y='48' font-family='Segoe UI' font-size='22' fill='%230b2b4a' font-weight='600'%3E🏛️ Barangay Hall%3C/text%3E%3C/svg%3E" alt="barangay hall" />
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80" width="200" height="80">
+                    <rect width="200" height="80" fill="#e9eff6" rx="16"/>
+                    <text x="100" y="48" font-family="Segoe UI" font-size="22" fill="#0b2b4a" font-weight="600" text-anchor="middle">🏛️ Barangay Hall</text>
+                </svg>
             </div>
         </section>
 
@@ -1166,7 +1175,6 @@
             <button class="close-modal" id="closeModalBtn">&times;</button>
         </div>
         
-        <!-- Scroll indicator - shows when there's content to scroll -->
         <div class="scroll-indicator show" id="scrollIndicator">
             <i class="fa-solid fa-arrows-up-down"></i> Scroll down to complete all fields
         </div>
@@ -1268,7 +1276,7 @@
     </div>
 </div>
 
-<!-- ===== BARANGAY CREATE MODAL (kept simple) ===== -->
+<!-- ===== BARANGAY CREATE MODAL ===== -->
 <div id="barangayModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -1519,7 +1527,6 @@
         const scrollIndicator = document.getElementById('scrollIndicator');
 
         if (formScrollContainer && scrollIndicator) {
-            // Check if scrolling is needed
             function checkScrollNeeded() {
                 const contentHeight = formScrollContainer.scrollHeight;
                 const containerHeight = formScrollContainer.clientHeight;
@@ -1530,11 +1537,9 @@
                 }
             }
 
-            // Check on load and resize
             setTimeout(checkScrollNeeded, 100);
             window.addEventListener('resize', checkScrollNeeded);
 
-            // Hide indicator when user scrolls
             formScrollContainer.addEventListener('scroll', function() {
                 scrollIndicator.classList.remove('show');
             });
@@ -1625,7 +1630,6 @@
                 document.body.style.overflow = 'hidden';
                 updateCitizenBarangaySelect();
                 
-                // Re-check scroll indicator after modal opens
                 setTimeout(() => {
                     if (formScrollContainer) {
                         const contentHeight = formScrollContainer.scrollHeight;
@@ -1644,7 +1648,6 @@
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
             if (form) form.reset();
-            // Reset scroll indicator
             if (scrollIndicator) {
                 scrollIndicator.classList.remove('show');
             }
@@ -1671,11 +1674,6 @@
                 const contact = document.getElementById('contact').value.trim();
                 const status = document.getElementById('status').value;
                 const selectedBarangay = document.getElementById('citizenBarangay').value;
-                const email = document.getElementById('email').value.trim();
-                const birthdate = document.getElementById('birthdate').value;
-                const civilStatus = document.getElementById('civilStatus').value;
-                const occupation = document.getElementById('occupation').value.trim();
-                const additionalInfo = document.getElementById('additionalInfo').value.trim();
 
                 if (!fullname) { alert('Please enter full name.'); return; }
                 if (!age || isNaN(age) || Number(age) < 0) { alert('Please enter a valid age.'); return; }
@@ -1695,12 +1693,7 @@
                     address: address,
                     contact: contact,
                     status: status,
-                    barangay: selectedBarangay,
-                    email: email || 'N/A',
-                    birthdate: birthdate || 'N/A',
-                    civilStatus: civilStatus || 'N/A',
-                    occupation: occupation || 'N/A',
-                    additionalInfo: additionalInfo || 'N/A'
+                    barangay: selectedBarangay
                 };
 
                 citizens.push(citizen);
