@@ -577,6 +577,100 @@
             background: #e2e8f0;
         }
 
+        /* Barangay Management Section */
+        .barangay-section {
+            background: white;
+            border-radius: 28px;
+            padding: 1.5rem 1.8rem 2rem;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.01);
+            border: 1px solid #edf2f7;
+            margin-bottom: 2.5rem;
+        }
+
+        .barangay-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .barangay-header h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0b2b4a;
+        }
+
+        .barangay-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .barangay-item {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 16px;
+            border: 1px solid #eef2f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.2s;
+        }
+
+        .barangay-item:hover {
+            border-color: #0b2b4a;
+            background: #f1f5f9;
+        }
+
+        .barangay-item .info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .barangay-item .info .name {
+            font-weight: 600;
+            color: #0b2b4a;
+        }
+
+        .barangay-item .info .code {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .barangay-item .actions button {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0.3rem 0.5rem;
+            border-radius: 8px;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .barangay-item .actions button:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-create-barangay {
+            background: #0b2b4a;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-create-barangay:hover {
+            background: #1a3f5f;
+        }
+
         /* preview cards */
         .preview-pages {
             display: grid;
@@ -716,6 +810,9 @@
                 margin: 10% auto;
                 padding: 1.5rem;
             }
+            .barangay-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 480px) {
@@ -741,7 +838,7 @@
 <header class="topbar">
     <div class="top-left">
         <div class="logo">
-            <img src=<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230b2b4a'/%3E%3Ctext x='12' y='55' font-family='Arial' font-size='18' fill='white' font-weight='bold'%3EBEST%3C/text%3E%3C/svg%3E" alt="BEST Logo" /> />
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230b2b4a'/%3E%3Ctext x='12' y='55' font-family='Arial' font-size='18' fill='white' font-weight='bold'%3EBEST%3C/text%3E%3C/svg%3E" alt="BEST Logo" />
         </div>
         <div class="barangay-title">
             <h2>B.E.S.T</h2>
@@ -810,6 +907,19 @@
             <div class="card red"><i class="fa-solid fa-shield-halved"></i><div><h2>14</h2><p>Active Cases</p><small>For Follow Up</small></div></div>
         </section>
 
+        <!-- BARANGAY MANAGEMENT SECTION -->
+        <section class="barangay-section">
+            <div class="barangay-header">
+                <h2><i class="fa-solid fa-map-pin"></i> Barangay Management</h2>
+                <button class="btn-create-barangay" id="createBarangayBtn">
+                    <i class="fa-solid fa-plus"></i> Create New Barangay
+                </button>
+            </div>
+            <div id="barangayList" class="barangay-grid">
+                <!-- Barangay items will be loaded here -->
+            </div>
+        </section>
+
         <!-- CITIZENS TABLE -->
         <section class="table-container">
             <div class="table-header">
@@ -819,8 +929,8 @@
                 </div>
                 <div class="table-tools">
                     <input type="text" placeholder="Search by name, address or ID..." />
-                    <select>
-                        <option>All Barangay</option>
+                    <select id="barangayFilter">
+                        <option value="all">All Barangay</option>
                     </select>
                     <select>
                         <option>All</option>
@@ -917,10 +1027,227 @@
     </div>
 </div>
 
+<!-- ===== BARANGAY CREATE MODAL ===== -->
+<div id="barangayModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fa-solid fa-building"></i> Create New Barangay</h2>
+            <button class="close-modal" id="closeBarangayModal">&times;</button>
+        </div>
+        <form id="barangayForm">
+            <div class="form-group">
+                <label for="barangayName">Barangay Name</label>
+                <input type="text" id="barangayName" placeholder="e.g., North Poblacion" required />
+            </div>
+            <div class="form-group">
+                <label for="barangayCode">Barangay Code</label>
+                <input type="text" id="barangayCode" placeholder="e.g., BRGY-001" required />
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" id="cancelBarangayBtn">Cancel</button>
+                <button type="submit" class="btn-submit"><i class="fa-solid fa-check"></i> Create Barangay</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <!-- ===== FULLY FUNCTIONAL JAVASCRIPT ===== -->
 <script>
     (function() {
-        // ----- MODAL CONTROLS -----
+        // ----- BARANGAY DATA MANAGEMENT -----
+        const BARANGAY_DATA_FILE = 'BarangayData.json';
+        let barangays = [];
+        let citizenNumber = 1;
+
+        // ----- LOAD BARANGAY DATA -----
+        function loadBarangays() {
+            try {
+                // Try to load from localStorage first (for demo purposes)
+                const stored = localStorage.getItem('barangayData');
+                if (stored) {
+                    barangays = JSON.parse(stored);
+                } else {
+                    // Initialize with sample data if empty
+                    barangays = [
+                        { name: "North Poblacion", code: "BRGY-001" },
+                        { name: "South Poblacion", code: "BRGY-002" },
+                        { name: "East District", code: "BRGY-003" }
+                    ];
+                    saveBarangays();
+                }
+            } catch (e) {
+                console.error('Error loading barangays:', e);
+                barangays = [
+                    { name: "North Poblacion", code: "BRGY-001" },
+                    { name: "South Poblacion", code: "BRGY-002" }
+                ];
+            }
+            renderBarangays();
+            updateBarangayFilter();
+        }
+
+        // ----- SAVE BARANGAY DATA -----
+        function saveBarangays() {
+            try {
+                localStorage.setItem('barangayData', JSON.stringify(barangays));
+                // Also save as JSON file (simulated - in real environment this would be server-side)
+                console.log('Barangay data saved:', barangays);
+                
+                // Create individual JSON files for each barangay
+                barangays.forEach(barangay => {
+                    const fileName = barangay.name.replace(/\s+/g, '-') + '.json';
+                    const citizenData = JSON.parse(localStorage.getItem('citizenData_' + barangay.name) || '[]');
+                    console.log(`📄 ${fileName} created with ${citizenData.length} citizens`);
+                });
+            } catch (e) {
+                console.error('Error saving barangays:', e);
+            }
+        }
+
+        // ----- RENDER BARANGAY LIST -----
+        function renderBarangays() {
+            const container = document.getElementById('barangayList');
+            if (!container) return;
+
+            if (barangays.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #94a3b8;">
+                        <i class="fa-solid fa-building" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+                        No barangays created yet. Click "Create New Barangay" to add one.
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = barangays.map((barangay, index) => `
+                <div class="barangay-item">
+                    <div class="info">
+                        <span class="name">${barangay.name}</span>
+                        <span class="code">${barangay.code}</span>
+                    </div>
+                    <div class="actions">
+                        <button onclick="window.deleteBarangay(${index})" title="Delete Barangay">
+                            <i class="fa-solid fa-trash" style="color: #dc2626;"></i>
+                        </button>
+                        <button onclick="window.viewBarangayData('${barangay.name}')" title="View Citizens">
+                            <i class="fa-solid fa-users" style="color: #0b2b4a;"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ----- DELETE BARANGAY -----
+        window.deleteBarangay = function(index) {
+            if (index < 0 || index >= barangays.length) return;
+            const name = barangays[index].name;
+            if (confirm(`Are you sure you want to delete "${name}" barangay? This will also remove all citizen data.`)) {
+                barangays.splice(index, 1);
+                localStorage.removeItem('citizenData_' + name);
+                saveBarangays();
+                renderBarangays();
+                updateBarangayFilter();
+                alert(`✅ Barangay "${name}" deleted successfully.`);
+            }
+        };
+
+        // ----- VIEW BARANGAY DATA -----
+        window.viewBarangayData = function(name) {
+            const citizens = JSON.parse(localStorage.getItem('citizenData_' + name) || '[]');
+            if (citizens.length === 0) {
+                alert(`📋 No citizens registered in "${name}" yet.`);
+            } else {
+                let msg = `📋 Citizens in "${name}":\n\n`;
+                citizens.forEach((c, i) => {
+                    msg += `${i+1}. ${c.fullName} (${c.age}) - ${c.address}\n`;
+                });
+                alert(msg);
+            }
+        };
+
+        // ----- UPDATE BARANGAY FILTER DROPDOWN -----
+        function updateBarangayFilter() {
+            const filter = document.getElementById('barangayFilter');
+            if (!filter) return;
+            
+            const currentValue = filter.value;
+            filter.innerHTML = '<option value="all">All Barangay</option>';
+            barangays.forEach(b => {
+                const option = document.createElement('option');
+                option.value = b.name;
+                option.textContent = b.name;
+                filter.appendChild(option);
+            });
+            if (currentValue && barangays.some(b => b.name === currentValue)) {
+                filter.value = currentValue;
+            }
+        }
+
+        // ----- CREATE BARANGAY MODAL -----
+        const barangayModal = document.getElementById('barangayModal');
+        const createBarangayBtn = document.getElementById('createBarangayBtn');
+        const closeBarangayModal = document.getElementById('closeBarangayModal');
+        const cancelBarangayBtn = document.getElementById('cancelBarangayBtn');
+        const barangayForm = document.getElementById('barangayForm');
+
+        function openBarangayModal() {
+            barangayModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBarangayModalFunc() {
+            barangayModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            barangayForm.reset();
+        }
+
+        createBarangayBtn.addEventListener('click', openBarangayModal);
+        closeBarangayModal.addEventListener('click', closeBarangayModalFunc);
+        cancelBarangayBtn.addEventListener('click', closeBarangayModalFunc);
+
+        window.addEventListener('click', function(e) {
+            if (e.target === barangayModal) {
+                closeBarangayModalFunc();
+            }
+        });
+
+        // ----- SUBMIT BARANGAY FORM -----
+        barangayForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('barangayName').value.trim();
+            const code = document.getElementById('barangayCode').value.trim();
+
+            if (!name) { alert('Please enter barangay name.'); return; }
+            if (!code) { alert('Please enter barangay code.'); return; }
+
+            // Check for duplicate name
+            if (barangays.some(b => b.name.toLowerCase() === name.toLowerCase())) {
+                alert('⚠️ A barangay with this name already exists.');
+                return;
+            }
+
+            // Check for duplicate code
+            if (barangays.some(b => b.code.toLowerCase() === code.toLowerCase())) {
+                alert('⚠️ A barangay with this code already exists.');
+                return;
+            }
+
+            barangays.push({ name, code });
+            saveBarangays();
+            renderBarangays();
+            updateBarangayFilter();
+            closeBarangayModalFunc();
+            
+            // Create the individual JSON file for this barangay
+            const fileName = name.replace(/\s+/g, '-') + '.json';
+            localStorage.setItem('citizenData_' + name, JSON.stringify([]));
+            console.log(`✅ Created ${fileName} for ${name}`);
+            
+            alert(`✅ Barangay "${name}" created successfully!\n📄 Created file: ${fileName}`);
+        });
+
+        // ----- CITIZEN MODAL -----
         const modal = document.getElementById('citizenModal');
         const openBtn = document.getElementById('openModalBtn');
         const closeBtn = document.getElementById('closeModalBtn');
@@ -931,40 +1258,41 @@
         // Open modal
         openBtn.addEventListener('click', function(e) {
             e.stopPropagation();
+            // Check if barangays exist
+            if (barangays.length === 0) {
+                alert('⚠️ Please create a barangay first before adding citizens.');
+                return;
+            }
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
         });
 
-        // Close modal functions
-        function closeModal() {
+        function closeModalFunc() {
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
             form.reset();
         }
 
-        closeBtn.addEventListener('click', closeModal);
-        cancelBtn.addEventListener('click', closeModal);
+        closeBtn.addEventListener('click', closeModalFunc);
+        cancelBtn.addEventListener('click', closeModalFunc);
 
-        // Close modal when clicking outside
         window.addEventListener('click', function(e) {
             if (e.target === modal) {
-                closeModal();
+                closeModalFunc();
             }
         });
 
-        // ----- FORM SUBMIT -----
-        let citizenNumber = 1; // Start from BESTID-0001
-
+        // ----- SUBMIT CITIZEN FORM -----
         form.addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Get form values
             const fullname = document.getElementById('fullName').value.trim();
             const age = document.getElementById('age').value.trim();
             const gender = document.getElementById('gender').value;
             const address = document.getElementById('address').value.trim();
             const contact = document.getElementById('contact').value.trim();
             const status = document.getElementById('status').value;
+            const selectedBarangay = document.getElementById('barangayFilter').value;
 
             // Validation
             if (!fullname) { alert('Please enter full name.'); return; }
@@ -973,15 +1301,43 @@
             if (!address) { alert('Please enter address.'); return; }
             if (!contact) { alert('Please enter contact number.'); return; }
 
+            // Determine which barangay to save to
+            let targetBarangay = selectedBarangay;
+            if (targetBarangay === 'all') {
+                if (barangays.length === 0) {
+                    alert('⚠️ Please create a barangay first.');
+                    return;
+                }
+                targetBarangay = barangays[0].name;
+            }
+
+            // Get existing citizens for this barangay
+            let citizens = JSON.parse(localStorage.getItem('citizenData_' + targetBarangay) || '[]');
+            
+            // Generate ID
+            const id = "BESTID-" + String(citizenNumber).padStart(4, "0");
+            citizenNumber++;
+
+            // Create citizen object
+            const citizen = {
+                id: id,
+                fullName: fullname,
+                age: age,
+                gender: gender,
+                address: address,
+                contact: contact,
+                status: status,
+                barangay: targetBarangay
+            };
+
+            citizens.push(citizen);
+            localStorage.setItem('citizenData_' + targetBarangay, JSON.stringify(citizens));
+
             // Remove "coming soon" row if exists
             const comingRow = tbody.querySelector('.coming');
             if (comingRow) {
                 comingRow.parentElement.remove();
             }
-
-            // Generate ID: BESTID-0001, BESTID-0002, etc.
-            const id = "BESTID-" + String(citizenNumber).padStart(4, "0");
-            citizenNumber++;
 
             // Insert row
             const row = tbody.insertRow();
@@ -990,7 +1346,7 @@
                 <td>${fullname}</td>
                 <td>${age}</td>
                 <td>${gender}</td>
-                <td>${address}</td>
+                <td>${address} (${targetBarangay})</td>
                 <td>${contact}</td>
                 <td>${status}</td>
                 <td>
@@ -1008,12 +1364,11 @@
                 });
             });
 
-            // Close modal and reset form
-            closeModal();
-            alert('✅ Citizen ' + fullname + ' added successfully!');
+            closeModalFunc();
+            alert(`✅ Citizen "${fullname}" added to "${targetBarangay}" successfully!`);
         });
 
-        // ----- SEARCH (dummy) -----
+        // ----- SEARCH -----
         const searchInput = document.querySelector('.table-tools input');
         if (searchInput) {
             searchInput.addEventListener('keyup', function(e) {
@@ -1025,6 +1380,67 @@
                         alert('Please enter a search term.');
                     }
                 }
+            });
+        }
+
+        // ----- FILTER BARANGAY -----
+        document.getElementById('barangayFilter')?.addEventListener('change', function() {
+            const selected = this.value;
+            if (selected === 'all') {
+                // Load all citizens from all barangays
+                let allCitizens = [];
+                barangays.forEach(b => {
+                    const citizens = JSON.parse(localStorage.getItem('citizenData_' + b.name) || '[]');
+                    allCitizens = allCitizens.concat(citizens);
+                });
+                updateTable(allCitizens);
+            } else {
+                const citizens = JSON.parse(localStorage.getItem('citizenData_' + selected) || '[]');
+                updateTable(citizens);
+            }
+        });
+
+        // ----- UPDATE TABLE -----
+        function updateTable(citizens) {
+            const tbody = document.getElementById('citizenTable');
+            if (!tbody) return;
+
+            if (citizens.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="coming">
+                            — No citizens registered yet —
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = citizens.map(c => `
+                <tr>
+                    <td>${c.id}</td>
+                    <td>${c.fullName}</td>
+                    <td>${c.age}</td>
+                    <td>${c.gender}</td>
+                    <td>${c.address}</td>
+                    <td>${c.contact}</td>
+                    <td>${c.status}</td>
+                    <td>
+                        <button title="View">👁</button>
+                        <button title="Edit">✏</button>
+                        <button title="More">⋮</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Attach action handlers
+            tbody.querySelectorAll('td:last-child button').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const row = this.closest('tr');
+                    const name = row ? row.cells[1]?.textContent || 'citizen' : 'citizen';
+                    alert('⚙️ Action button clicked for ' + name);
+                });
             });
         }
 
@@ -1059,44 +1475,25 @@
             });
         });
 
-        // ----- TABLE ACTION BUTTONS (existing rows) -----
-        document.querySelectorAll('#citizenTable td:last-child button').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const row = this.closest('tr');
-                const name = row ? row.cells[1]?.textContent || 'citizen' : 'citizen';
-                alert('⚙️ Action button clicked for ' + name);
+        // ----- INITIALIZE -----
+        loadBarangays();
+
+        // Load initial citizen data
+        const initialFilter = document.getElementById('barangayFilter')?.value || 'all';
+        if (initialFilter === 'all') {
+            let allCitizens = [];
+            barangays.forEach(b => {
+                const citizens = JSON.parse(localStorage.getItem('citizenData_' + b.name) || '[]');
+                allCitizens = allCitizens.concat(citizens);
             });
-        });
+            updateTable(allCitizens);
+        }
 
         console.log('✅ B.E.S.T Barangay Electronic System is fully functional.');
-
-        // ----- CHECK FOR script.js (if exists, execute it) -----
-        // Dynamically check if script.js is loaded
-        const scripts = document.getElementsByTagName('script');
-        let scriptJsLoaded = false;
-        for (let s of scripts) {
-            if (s.src && s.src.includes('script.js')) {
-                scriptJsLoaded = true;
-                break;
-            }
-        }
-
-        // If script.js is loaded, its functions will already be available
-        // We can also try to load it if not present (but we'll just check)
-        if (!scriptJsLoaded) {
-            console.log('ℹ️ script.js not found. Using default functionality.');
-        } else {
-            console.log('✅ script.js detected and loaded.');
-            // If there's a specific function to call, we can do it here
-            // For example: if (typeof someFunction === 'function') { someFunction(); }
-        }
+        console.log('📁 Barangay data stored in localStorage. Individual JSON files created per barangay.');
 
     })();
 </script>
-
-<!-- Optional: If you have script.js, it will be loaded here -->
-<!-- <script src="js/script.js"></script> -->
 
 </body>
 </html>
