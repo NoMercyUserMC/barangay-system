@@ -1,594 +1,915 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BEST · Barangay Electronic System</title>
-  <!-- Font Awesome 6 (Free) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BEST · Barangay Electronic System</title>
+    <!-- Font Awesome 6 (Free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+        }
 
-    body {
-      background-color: #0b0e0f;
-      /* === CUSTOM BACKGROUND IMAGE === */
-      background-image: url('BEST.png');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      color: #d4eaf7;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+        body {
+            background-color: #0b0e0f;
+            background-image: url('BEST.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: #d4eaf7;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-    .container {
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      width: 100%;
-    }
+        /* ===== FLOATING BACKGROUND PARTICLES ===== */
+        #particlesCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    /* ===== SPLASH SCREEN OVERLAY ===== */
-    #splashScreen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 9999;
-      background: rgba(0, 0, 0, 0.85);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
 
-    #splashScreen.active {
-      display: flex;
-    }
+        /* ===== SPLASH SCREEN (ENHANCED) ===== */
+        #splashScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            opacity: 1;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+            visibility: visible;
+        }
 
-    .splash-content {
-      text-align: center;
-      animation: pulseGlow 2s ease-in-out infinite;
-    }
+        #splashScreen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
 
-    .splash-content img {
-      max-width: 400px;
-      width: 80%;
-      height: auto;
-      border-radius: 30px;
-      box-shadow: 0 0 60px rgba(60, 160, 220, 0.3);
-      border: 2px solid rgba(60, 160, 220, 0.2);
-      animation: fadeInOut 1.5s ease-in-out infinite;
-    }
+        .splash-content {
+            text-align: center;
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
 
-    .splash-content .loading-text {
-      margin-top: 2rem;
-      color: #8fcbff;
-      font-size: 1.2rem;
-      font-weight: 300;
-      letter-spacing: 4px;
-      animation: pulseText 1.5s ease-in-out infinite;
-    }
+        .splash-content img {
+            max-width: 350px;
+            width: 80%;
+            height: auto;
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(60, 160, 220, 0.4);
+            border: 2px solid rgba(60, 160, 220, 0.3);
+            animation: floatLogo 3s ease-in-out infinite;
+        }
 
-    .splash-content .loading-dots {
-      display: inline-block;
-      animation: dots 1.5s steps(4, end) infinite;
-    }
+        @keyframes floatLogo {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-12px);
+            }
+        }
 
-    @keyframes fadeInOut {
-      0% { opacity: 0.6; transform: scale(0.95); }
-      50% { opacity: 1; transform: scale(1.02); }
-      100% { opacity: 0.6; transform: scale(0.95); }
-    }
+        .splash-content .loading-text {
+            margin-top: 2rem;
+            color: #8fcbff;
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+        }
 
-    @keyframes pulseGlow {
-      0% { filter: drop-shadow(0 0 10px rgba(60, 160, 220, 0.1)); }
-      50% { filter: drop-shadow(0 0 30px rgba(60, 160, 220, 0.3)); }
-      100% { filter: drop-shadow(0 0 10px rgba(60, 160, 220, 0.1)); }
-    }
+        .progress-bar {
+            width: 220px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 1.5rem auto 0;
+            overflow: hidden;
+        }
 
-    @keyframes pulseText {
-      0% { opacity: 0.5; }
-      50% { opacity: 1; }
-      100% { opacity: 0.5; }
-    }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #7bbfff, #3d8fc4);
+            border-radius: 10px;
+            animation: fillProgress 3s ease-in-out forwards;
+        }
 
-    @keyframes dots {
-      0% { content: ''; }
-      25% { content: '.'; }
-      50% { content: '..'; }
-      75% { content: '...'; }
-      100% { content: ''; }
-    }
+        @keyframes fillProgress {
+            0% {
+                width: 0%;
+            }
+            100% {
+                width: 100%;
+            }
+        }
 
-    .loading-dots::after {
-      content: '';
-      animation: dots 1.5s steps(4, end) infinite;
-    }
+        @keyframes pulseGlow {
+            0% {
+                filter: drop-shadow(0 0 10px rgba(60, 160, 220, 0.2));
+            }
+            50% {
+                filter: drop-shadow(0 0 35px rgba(60, 160, 220, 0.5));
+            }
+            100% {
+                filter: drop-shadow(0 0 10px rgba(60, 160, 220, 0.2));
+            }
+        }
 
-    /* ===== NAVIGATION with glass effect & light blue ===== */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 0;
-      border-bottom: 1px solid #2a4a5a;
-      flex-wrap: wrap;
-      gap: 1rem 0;
-      background: rgba(10, 18, 22, 0.45);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-radius: 0 0 20px 20px;
-      padding: 1rem 2rem;
-      margin: 0 -1rem;
-    }
+        /* ===== NAVIGATION with glass effect & light blue ===== */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+            border-bottom: 1px solid #2a4a5a;
+            flex-wrap: wrap;
+            gap: 1rem 0;
+            background: rgba(10, 18, 22, 0.45);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 0 0 20px 20px;
+            padding: 1rem 2rem;
+            margin: 0 -1rem;
+            animation: slideDown 0.8s ease-out;
+        }
 
-    .logo {
-      font-size: 1.8rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      color: #8fcbff;
-      text-shadow: 0 0 6px #1a4a6a;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    .logo i {
-      font-size: 2rem;
-      color: #7bbfff;
-    }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #8fcbff;
+            text-shadow: 0 0 6px #1a4a6a;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: transform 0.3s;
+        }
 
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      font-weight: 500;
-      font-size: 1rem;
-      flex-wrap: wrap;
-    }
+        .logo:hover {
+            transform: scale(1.05);
+        }
 
-    .nav-links a {
-      color: #b0d8f5;
-      text-decoration: none;
-      transition: 0.2s;
-      padding: 0.3rem 0;
-      border-bottom: 2px solid transparent;
-      cursor: pointer;
-    }
+        .logo i {
+            font-size: 2rem;
+            color: #7bbfff;
+            animation: iconPulse 2s infinite;
+        }
 
-    .nav-links a:hover {
-      color: #8fcbff;
-      border-bottom-color: #66b5ff;
-    }
+        @keyframes iconPulse {
+            0%,
+            100% {
+                text-shadow: 0 0 5px #7bbfff;
+            }
+            50% {
+                text-shadow: 0 0 20px #7bbfff, 0 0 30px #3d8fc4;
+            }
+        }
 
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 1.8rem;
-    }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            font-weight: 500;
+            font-size: 1rem;
+            flex-wrap: wrap;
+        }
 
-    .login-btn {
-      background: rgba(10, 22, 30, 0.5);
-      backdrop-filter: blur(4px);
-      border: 1.5px solid #4a9fd4;
-      color: #8fcbff;
-      padding: 0.5rem 1.4rem;
-      border-radius: 40px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: default;
-      transition: 0.2s;
-      letter-spacing: 0.3px;
-      box-shadow: 0 0 6px rgba(0, 150, 255, 0.1);
-    }
+        .nav-links a {
+            color: #b0d8f5;
+            text-decoration: none;
+            transition: 0.3s;
+            padding: 0.3rem 0;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .login-btn i {
-      margin-right: 8px;
-      color: #7bbfff;
-    }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #66b5ff;
+            transition: width 0.3s ease;
+        }
 
-    .login-btn:hover {
-      background: rgba(20, 50, 70, 0.7);
-      border-color: #66b5ff;
-      box-shadow: 0 0 14px #2a7abf;
-    }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
 
-    /* ----- HERO with glass effect & light blue ----- */
-    .hero {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 4rem 1rem 3rem;
-      background: rgba(10, 18, 22, 0.5);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 48px;
-      margin: 2.8rem 0 3rem;
-      border: 1px solid #2a4a5a;
-      box-shadow: 0 12px 40px rgba(0, 10, 20, 0.9);
-    }
+        .nav-links a:hover {
+            color: #8fcbff;
+            transform: translateY(-2px);
+        }
 
-    .hero-badge {
-      display: inline-block;
-      background: rgba(10, 35, 50, 0.7);
-      backdrop-filter: blur(4px);
-      color: #8fcbff;
-      padding: 0.4rem 1.4rem;
-      border-radius: 60px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.8px;
-      border: 1px solid #3a7a9a;
-      margin-bottom: 2rem;
-    }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.8rem;
+        }
 
-    .hero-badge i {
-      margin-right: 8px;
-      color: #66b5ff;
-    }
+        .login-btn {
+            background: rgba(10, 22, 30, 0.5);
+            backdrop-filter: blur(4px);
+            border: 1.5px solid #4a9fd4;
+            color: #8fcbff;
+            padding: 0.5rem 1.4rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 0.3px;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .hero-headline {
-      font-size: 2.6rem;
-      font-weight: 700;
-      line-height: 1.3;
-      color: #d4eaf7;
-      text-shadow: 0 0 18px #1a4a6a;
-      max-width: 900px;
-      margin-bottom: 1.2rem;
-    }
+        .login-btn i {
+            margin-right: 8px;
+            color: #7bbfff;
+        }
 
-    .hero-headline .highlight {
-      background: linear-gradient(145deg, #7bbfff, #3d8fc4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: 0 0 30px #2a7abf;
-    }
+        .login-btn:hover {
+            background: rgba(20, 50, 70, 0.8);
+            border-color: #66b5ff;
+            box-shadow: 0 0 25px #2a7abf;
+            transform: translateY(-2px);
+        }
 
-    .hero p {
-      font-size: 1.3rem;
-      max-width: 700px;
-      color: #b0d8f5;
-      margin-bottom: 0.5rem;
-      line-height: 1.6;
-      font-weight: 400;
-      padding: 0 0.5rem;
-    }
+        /* Ripple effect (added via JS) */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: rippleEffect 0.6s linear;
+            pointer-events: none;
+        }
 
-    /* ----- feature cards with glass effect & light blue ----- */
-    .features-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      justify-content: center;
-      margin: 4rem 0 3rem;
-    }
+        @keyframes rippleEffect {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
 
-    .feature-card {
-      background: rgba(10, 18, 22, 0.6);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid #2a4a5a;
-      border-radius: 40px;
-      padding: 2.2rem 2rem;
-      flex: 1 1 220px;
-      max-width: 280px;
-      transition: 0.2s;
-      box-shadow: 0 8px 20px rgba(0, 10, 20, 0.7);
-      text-align: center;
-    }
+        /* ----- HERO with glass effect & light blue ----- */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 4rem 1rem 3rem;
+            background: rgba(10, 18, 22, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 48px;
+            margin: 2.8rem 0 3rem;
+            border: 1px solid #2a4a5a;
+            box-shadow: 0 12px 40px rgba(0, 10, 20, 0.9);
+            animation: fadeInUp 1s ease-out;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
 
-    .feature-card:hover {
-      border-color: #5a9acf;
-      box-shadow: 0 0 28px #1a5a8a;
-      transform: translateY(-6px);
-    }
+        .hero:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 160, 255, 0.2);
+        }
 
-    .feature-card i {
-      font-size: 3.2rem;
-      color: #66b5ff;
-      margin-bottom: 1rem;
-      text-shadow: 0 0 18px #1a5a8a;
-    }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    .feature-card h3 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #c8e6ff;
-      letter-spacing: -0.3px;
-      margin-bottom: 0.4rem;
-    }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(10, 35, 50, 0.7);
+            backdrop-filter: blur(4px);
+            color: #8fcbff;
+            padding: 0.4rem 1.4rem;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            border: 1px solid #3a7a9a;
+            margin-bottom: 2rem;
+            animation: badgeGlow 2s infinite alternate;
+        }
 
-    .feature-card p {
-      color: #a0c8e8;
-      font-weight: 400;
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
+        @keyframes badgeGlow {
+            from {
+                box-shadow: 0 0 5px #3a7a9a;
+            }
+            to {
+                box-shadow: 0 0 20px #4a9fd4;
+            }
+        }
 
-    .feature-card .tag {
-      display: inline-block;
-      margin-top: 0.8rem;
-      background: rgba(15, 40, 55, 0.7);
-      padding: 0.2rem 1rem;
-      border-radius: 30px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 1px;
-      color: #8fcbff;
-      border: 1px solid #3a7a9a;
-    }
+        .hero-badge i {
+            margin-right: 8px;
+            color: #66b5ff;
+        }
 
-    /* ----- footer with glass effect & light blue ----- */
-    .footer-section {
-      border-top: 1px solid #2a4a5a;
-      padding: 2.8rem 0 1.5rem;
-      margin-top: 2rem;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1.5rem;
-      background: rgba(10, 18, 22, 0.3);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-radius: 20px;
-      padding: 2rem 2rem 1.5rem;
-      margin-bottom: 1rem;
-    }
+        .hero-headline {
+            font-size: 2.6rem;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #d4eaf7;
+            text-shadow: 0 0 18px #1a4a6a;
+            max-width: 900px;
+            margin-bottom: 1.2rem;
+        }
 
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.8rem 2.5rem;
-    }
+        .hero-headline .highlight {
+            background: linear-gradient(145deg, #7bbfff, #3d8fc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px #2a7abf;
+            animation: textShine 3s ease-in-out infinite alternate;
+        }
 
-    .footer-links a {
-      color: #90bcd8;
-      text-decoration: none;
-      font-weight: 400;
-      font-size: 0.95rem;
-      transition: 0.2s;
-      border-bottom: 1px dotted transparent;
-    }
+        @keyframes textShine {
+            from {
+                filter: brightness(1);
+            }
+            to {
+                filter: brightness(1.3);
+            }
+        }
 
-    .footer-links a:hover {
-      color: #8fcbff;
-      border-bottom-color: #4a9fd4;
-    }
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            color: #b0d8f5;
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+            font-weight: 400;
+            padding: 0 0.5rem;
+        }
 
-    .footer-social i {
-      font-size: 1.6rem;
-      margin-left: 1.2rem;
-      color: #4a8aaa;
-      transition: 0.2s;
-    }
+        /* ----- feature cards with glass effect & light blue ----- */
+        .features-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin: 4rem 0 3rem;
+        }
 
-    .footer-social i:hover {
-      color: #7bbfff;
-      text-shadow: 0 0 16px #3a8ac4;
-    }
+        .feature-card {
+            background: rgba(10, 18, 22, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid #2a4a5a;
+            border-radius: 40px;
+            padding: 2.2rem 2rem;
+            flex: 1 1 220px;
+            max-width: 280px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 20px rgba(0, 10, 20, 0.7);
+            text-align: center;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
 
-    .copy {
-      font-size: 0.8rem;
-      color: #4a7a8a;
-      margin-top: 1.2rem;
-      width: 100%;
-      text-align: center;
-      border-top: 1px solid #1a3a4a;
-      padding-top: 1.5rem;
-    }
+        .feature-card:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(3deg);
+            border-color: #5a9acf;
+            box-shadow: 0 20px 40px rgba(0, 160, 255, 0.3);
+        }
 
-    /* ----- responsive ----- */
-    @media (max-width: 780px) {
-      .navbar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1rem;
-        padding: 1rem;
-      }
-      .nav-links {
-        justify-content: center;
-        gap: 1.2rem;
-        font-size: 0.95rem;
-      }
-      .nav-actions {
-        justify-content: center;
-        margin-top: 0.2rem;
-      }
-      .hero-headline {
-        font-size: 2.0rem;
-      }
-      .hero p {
-        font-size: 1.1rem;
-      }
-      .feature-card {
-        flex: 1 1 160px;
-      }
-      .footer-section {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        padding: 1.5rem;
-      }
-      .footer-links {
-        justify-content: center;
-      }
-      .splash-content img {
-        max-width: 280px;
-      }
-    }
+        .feature-card i {
+            font-size: 3.2rem;
+            color: #66b5ff;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 18px #1a5a8a;
+            transition: transform 0.3s;
+        }
 
-    @media (max-width: 480px) {
-      .container {
-        padding: 0 1rem;
-      }
-      .hero {
-        padding: 2.5rem 0.5rem;
-      }
-      .hero-headline {
-        font-size: 1.7rem;
-      }
-      .navbar {
-        padding: 0.5rem;
-      }
-      .splash-content img {
-        max-width: 200px;
-      }
-      .splash-content .loading-text {
-        font-size: 1rem;
-      }
-    }
-  </style>
+        .feature-card:hover i {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .feature-card h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #c8e6ff;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.4rem;
+        }
+
+        .feature-card p {
+            color: #a0c8e8;
+            font-weight: 400;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .feature-card .tag {
+            display: inline-block;
+            margin-top: 0.8rem;
+            background: rgba(15, 40, 55, 0.7);
+            padding: 0.2rem 1rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #8fcbff;
+            border: 1px solid #3a7a9a;
+            transition: 0.3s;
+        }
+
+        .feature-card:hover .tag {
+            background: rgba(30, 70, 90, 0.8);
+            box-shadow: 0 0 15px #4a9fd4;
+        }
+
+        /* ----- footer with glass effect & light blue ----- */
+        .footer-section {
+            border-top: 1px solid #2a4a5a;
+            padding: 2.8rem 0 1.5rem;
+            margin-top: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+            background: rgba(10, 18, 22, 0.3);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 2rem 2rem 1.5rem;
+            margin-bottom: 1rem;
+            transition: box-shadow 0.3s;
+        }
+
+        .footer-section:hover {
+            box-shadow: 0 0 30px rgba(0, 160, 255, 0.15);
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem 2.5rem;
+        }
+
+        .footer-links a {
+            color: #90bcd8;
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            border-bottom: 1px dotted transparent;
+            cursor: pointer;
+        }
+
+        .footer-links a:hover {
+            color: #8fcbff;
+            border-bottom-color: #4a9fd4;
+        }
+
+        .footer-social i {
+            font-size: 1.6rem;
+            margin-left: 1.2rem;
+            color: #4a8aaa;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .footer-social i:hover {
+            color: #7bbfff;
+            text-shadow: 0 0 20px #3a8ac4;
+            transform: translateY(-3px);
+        }
+
+        .copy {
+            font-size: 0.8rem;
+            color: #4a7a8a;
+            margin-top: 1.2rem;
+            width: 100%;
+            text-align: center;
+            border-top: 1px solid #1a3a4a;
+            padding-top: 1.5rem;
+        }
+
+        /* ----- responsive ----- */
+        @media (max-width: 780px) {
+            .navbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            .nav-links {
+                justify-content: center;
+                gap: 1.2rem;
+                font-size: 0.95rem;
+            }
+            .nav-actions {
+                justify-content: center;
+                margin-top: 0.2rem;
+            }
+            .hero-headline {
+                font-size: 2.0rem;
+            }
+            .hero p {
+                font-size: 1.1rem;
+            }
+            .feature-card {
+                flex: 1 1 160px;
+            }
+            .footer-section {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 1.5rem;
+            }
+            .footer-links {
+                justify-content: center;
+            }
+            .splash-content img {
+                max-width: 280px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 1rem;
+            }
+            .hero {
+                padding: 2.5rem 0.5rem;
+            }
+            .hero-headline {
+                font-size: 1.7rem;
+            }
+            .navbar {
+                padding: 0.5rem;
+            }
+            .splash-content img {
+                max-width: 200px;
+            }
+            .splash-content .loading-text {
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- ===== SPLASH SCREEN ===== -->
-  <div id="splashScreen">
-    <div class="splash-content">
-      <img src="BEST.png" alt="BEST Logo" id="splashImage">
-      <div class="loading-text">
-        Loading<span class="loading-dots"></span>
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-
-    <!-- NAVIGATION : BEST branding -->
-    <nav class="navbar">
-      <div class="logo">
-        <i class="fas fa-leaf"></i> BEST
-      </div>
-      <div class="nav-links">
-        <a href="#" id="dashboardLink"><i class="fas fa-home" style="margin-right: 5px;"></i>Dashboard</a>
-        <a href="#">Barangay</a>
-        <a href="#">Residents</a>
-        <a href="#">Services</a>
-        <a href="#">Reports</a>
-        <a href="#">Events</a>
-        <a href="#">Health</a>
-        <a href="#">Safety</a>
-        <a href="#">About</a>
-      </div>
-      <div class="nav-actions">
-        <span class="login-btn"><i class="fas fa-user-circle"></i> Log In</span>
-      </div>
-    </nav>
-
-    <!-- HERO : headline as one paragraph, smaller font -->
-    <div class="hero">
-      <div class="hero-badge">
-        <i class="fas fa-users-between-lines"></i> BARANGAY · ELECTRONIC · TOTAL COMMUNITY
-      </div>
-
-      <p class="hero-headline">
-        <span class="highlight">BEST</span> · Barangay Electronic System for Total Community Management
-      </p>
-
-      <p>
-        Streamline governance, empower residents, and build a connected barangay.<br>
-        Real‑time data, transparent services, and community engagement — all in one light blue &amp; black platform.
-      </p>
+    <!-- ===== SPLASH SCREEN (ENHANCED) ===== -->
+    <div id="splashScreen">
+        <div class="splash-content">
+            <img src="BEST.png" alt="BEST Logo" id="splashImage" />
+            <div class="loading-text">Loading…</div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
     </div>
 
-    <!-- FEATURE CARDS : core BEST modules (light blue & black) -->
-    <div class="features-grid">
-      <div class="feature-card">
-        <i class="fas fa-people-arrows"></i>
-        <h3>Resident Hub</h3>
-        <p>Digital IDs, requests, and community feedback – all in one dashboard.</p>
-        <span class="tag"><i class="fas fa-circle" style="color: #66b5ff; font-size: 0.5rem;"></i> TOTAL</span>
-      </div>
-      <div class="feature-card">
-        <i class="fas fa-chart-simple"></i>
-        <h3>Barangay Analytics</h3>
-        <p>Real‑time reports on health, safety, and service performance.</p>
-        <span class="tag"><i class="fas fa-star" style="color: #7bbfff;"></i> SMART</span>
-      </div>
-      <div class="feature-card">
-        <i class="fas fa-hand-holding-heart"></i>
-        <h3>Community Services</h3>
-        <p>Emergency alerts, event calendars, and volunteer coordination.</p>
-        <span class="tag"><i class="fas fa-globe-americas"></i> CONNECT</span>
-      </div>
+    <!-- Background particles canvas -->
+    <canvas id="particlesCanvas"></canvas>
+
+    <div class="container">
+
+        <!-- NAVIGATION : BEST branding -->
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-leaf"></i> BEST
+            </div>
+            <div class="nav-links">
+                <a href="#" id="dashboardLink"><i class="fas fa-home" style="margin-right:5px;"></i>Dashboard</a>
+                <a href="#">Barangay</a>
+                <!-- ★ Residents link – now points to Household.html via splash -->
+                <a href="#" id="residentsNavLink">Residents</a>
+                <a href="#">Services</a>
+                <a href="#">Reports</a>
+                <a href="#">Events</a>
+                <a href="#">Health</a>
+                <a href="#">Safety</a>
+                <a href="#">About</a>
+            </div>
+            <div class="nav-actions">
+                <span class="login-btn" id="loginBtn"><i class="fas fa-user-circle"></i> Log In</span>
+            </div>
+        </nav>
+
+        <!-- HERO -->
+        <div class="hero">
+            <div class="hero-badge">
+                <i class="fas fa-users-between-lines"></i> BARANGAY · ELECTRONIC · TOTAL COMMUNITY
+            </div>
+
+            <p class="hero-headline">
+                <span class="highlight">BEST</span> · Barangay Electronic System for Total Community Management
+            </p>
+
+            <p>
+                Streamline governance, empower residents, and build a connected barangay.<br />
+                Real‑time data, transparent services, and community engagement — all in one light blue &amp; black platform.
+            </p>
+        </div>
+
+        <!-- FEATURE CARDS -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-people-arrows"></i>
+                <h3>Resident Hub</h3>
+                <p>Digital IDs, requests, and community feedback – all in one dashboard.</p>
+                <span class="tag"><i class="fas fa-circle" style="color:#66b5ff;font-size:0.5rem;"></i> TOTAL</span>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-chart-simple"></i>
+                <h3>Barangay Analytics</h3>
+                <p>Real‑time reports on health, safety, and service performance.</p>
+                <span class="tag"><i class="fas fa-star" style="color:#7bbfff;"></i> SMART</span>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-hand-holding-heart"></i>
+                <h3>Community Services</h3>
+                <p>Emergency alerts, event calendars, and volunteer coordination.</p>
+                <span class="tag"><i class="fas fa-globe-americas"></i> CONNECT</span>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer-section">
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-leaf"></i> BEST</a>
+                <a href="#">Barangay</a>
+                <!-- ★ Footer Residents link also opens Household.html -->
+                <a href="#" id="residentsFooterLink">Residents</a>
+                <a href="#">Services</a>
+                <a href="#">Reports</a>
+                <a href="#">Events</a>
+                <a href="#">Health</a>
+                <a href="#">Safety</a>
+                <a href="#">About</a>
+            </div>
+            <div class="footer-social">
+                <i class="fab fa-facebook"></i>
+                <i class="fab fa-twitter"></i>
+                <i class="fab fa-youtube"></i>
+                <i class="fab fa-instagram"></i>
+            </div>
+            <div class="copy">
+                <i class="fas fa-circle" style="color:#3a8aaa;font-size:0.4rem;margin-right:8px;"></i>
+                BEST · Barangay Electronic System for Total Community Management
+                <i class="fas fa-circle" style="color:#3a8aaa;font-size:0.4rem;margin-left:8px;"></i>
+            </div>
+        </div>
+
     </div>
+    <!-- /container -->
 
-    <!-- FOOTER : BEST footer with links & social -->
-    <div class="footer-section">
-      <div class="footer-links">
-        <a href="#"><i class="fas fa-leaf"></i> BEST</a>
-        <a href="#">Barangay</a>
-        <a href="#">Residents</a>
-        <a href="#">Services</a>
-        <a href="#">Reports</a>
-        <a href="#">Events</a>
-        <a href="#">Health</a>
-        <a href="#">Safety</a>
-        <a href="#">About</a>
-      </div>
-      <div class="footer-social">
-        <i class="fab fa-facebook"></i>
-        <i class="fab fa-twitter"></i>
-        <i class="fab fa-youtube"></i>
-        <i class="fab fa-instagram"></i>
-      </div>
-      <div class="copy">
-        <i class="fas fa-circle" style="color: #3a8aaa; font-size: 0.4rem; margin-right: 8px;"></i>
-        BEST · Barangay Electronic System for Total Community Management
-        <i class="fas fa-circle" style="color: #3a8aaa; font-size: 0.4rem; margin-left: 8px;"></i>
-      </div>
-    </div>
+    <script>
+        (function() {
+            'use strict';
 
-  </div> <!-- /container -->
+            // ---------- SPLASH SCREEN ----------
+            const splashScreen = document.getElementById('splashScreen');
+            // Show splash for 3 seconds then fade out
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    splashScreen.classList.add('hidden');
+                    // Remove from DOM after transition
+                    setTimeout(() => {
+                        if (splashScreen.parentNode) splashScreen.remove();
+                    }, 600);
+                }, 3000);
+            });
 
-  <script>
-    (function() {
-      'use strict';
+            // ---------- REUSABLE SPLASH + NAVIGATION ----------
+            function showSplashAndNavigate(targetUrl) {
+                let splash = document.getElementById('splashScreen');
+                if (!splash) {
+                    splash = document.createElement('div');
+                    splash.id = 'splashScreen';
+                    splash.innerHTML = `
+                    <div class="splash-content">
+                      <img src="BEST.png" alt="BEST Logo" />
+                      <div class="loading-text">Loading…</div>
+                      <div class="progress-bar"><div class="progress-fill"></div></div>
+                    </div>`;
+                    document.body.appendChild(splash);
+                } else {
+                    splash.classList.remove('hidden');
+                }
+                // Reset progress bar animation
+                const progressFill = splash.querySelector('.progress-fill');
+                if (progressFill) {
+                    progressFill.style.animation = 'none';
+                    progressFill.offsetHeight; // trigger reflow
+                    progressFill.style.animation = 'fillProgress 2.5s ease-in-out forwards';
+                }
+                // Navigate after a short delay
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 2800);
+            }
 
-      const splashScreen = document.getElementById('splashScreen');
-      const dashboardLink = document.getElementById('dashboardLink');
+            // ---------- DASHBOARD LINK ----------
+            const dashboardLink = document.getElementById('dashboardLink');
+            dashboardLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showSplashAndNavigate('Dashboard.html');
+            });
 
-      // ===== FUNCTION: Show splash screen with fade in/out =====
-      function showSplashAndNavigate(targetUrl) {
-        // Show splash screen
-        splashScreen.classList.add('active');
+            // ---------- RESIDENTS LINK (nav) ----------
+            const residentsNavLink = document.getElementById('residentsNavLink');
+            residentsNavLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showSplashAndNavigate('Household.html');
+            });
 
-        // Start fade in/out animation (already running via CSS)
-        // After 5 seconds, navigate to dashboard
-        setTimeout(function() {
-          // Navigate to the target URL
-          window.location.href = targetUrl;
-        }, 5000); // 5 seconds
-      }
+            // ---------- RESIDENTS LINK (footer) ----------
+            const residentsFooterLink = document.getElementById('residentsFooterLink');
+            residentsFooterLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showSplashAndNavigate('Household.html');
+            });
 
-      // ===== DASHBOARD LINK CLICK =====
-      dashboardLink.addEventListener('click', function(e) {
-        e.preventDefault();
+            // ---------- BACKGROUND PARTICLES (Canvas) ----------
+            const canvas = document.getElementById('particlesCanvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let animationId;
 
-        // Path to your Dashboard.html
-        const dashboardPath = 'Dashboard.html';
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
 
-        // Show splash screen with fade effect, then navigate
-        showSplashAndNavigate(dashboardPath);
-      });
+            class Particle {
+                constructor() {
+                    this.reset();
+                }
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2.5 + 0.8;
+                    this.speedX = (Math.random() - 0.5) * 0.4;
+                    this.speedY = (Math.random() - 0.5) * 0.4;
+                    this.opacity = Math.random() * 0.5 + 0.2;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(102, 181, 255, ${this.opacity})`;
+                    ctx.shadowColor = 'rgba(102, 181, 255, 0.5)';
+                    ctx.shadowBlur = 8;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
 
-      // ===== (Optional) Also handle any other links that might need splash =====
-      // You can add more links here if needed
+            function initParticles(count = 70) {
+                particles = [];
+                for (let i = 0; i < count; i++) {
+                    particles.push(new Particle());
+                }
+            }
 
-      console.log('✅ BEST page ready. Click Dashboard to see splash effect.');
-    })();
-  </script>
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                // Connect nearby particles with lines
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 100) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(102, 181, 255, ${0.1 * (1 - dist / 100)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                animationId = requestAnimationFrame(animateParticles);
+            }
 
+            initParticles(60);
+            animateParticles();
+
+            // ---------- RIPPLE EFFECT ON CLICK ----------
+            function createRipple(e) {
+                const target = e.currentTarget;
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                const rect = target.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                ripple.style.width = ripple.style.height = `${size}px`;
+                ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+                ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+                target.style.position = target.style.position || 'relative';
+                target.style.overflow = 'hidden';
+                target.appendChild(ripple);
+                setTimeout(() => {
+                    if (ripple.parentNode) ripple.remove();
+                }, 600);
+            }
+
+            // Attach ripple to interactive elements
+            const rippleElements = document.querySelectorAll('button, .login-btn, .feature-card, .nav-links a, .footer-social i, .footer-links a');
+            rippleElements.forEach(el => {
+                el.addEventListener('click', createRipple);
+            });
+
+            // ---------- SMOOTH SCROLL REVEAL (Intersection Observer) ----------
+            const revealElements = document.querySelectorAll('.hero, .feature-card, .footer-section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            revealElements.forEach(el => {
+                el.style.opacity = 0;
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+
+            // Make hero visible immediately if already in view
+            window.addEventListener('load', () => {
+                revealElements.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        el.style.opacity = 1;
+                        el.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            console.log('✅ BEST: Residents → Household.html  |  Dashboard → Dashboard.html');
+        })();
+    </script>
 </body>
 </html>
