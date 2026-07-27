@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>B.E.S.T · Citizens · Barangay System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Nabla&family=Zen+Dots&family=Audiowide&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    }
+    body {
+      background: #070d07;
+      background-image: url('Homepage.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      color: #b3eab3;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* ===== GLASS ===== */
+    .glass {
+      background: rgba(10, 20, 10, 0.50);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid #2a6a2a;
+      box-shadow: 0 8px 32px rgba(0, 30, 0, 0.5);
+    }
+
+    /* ===== TOPBAR ===== */
+    .topbar {
+      background: rgba(10, 20, 10, 0.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #b3eab3;
+      padding: 0 2rem;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 24px rgba(0, 20, 0, 0.6);
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      border-bottom: 1px solid #2a6a2a;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    .topbar:hover {
+      box-shadow: 0 4px 35px rgba(60, 200, 60, 0.15);
+      border-bottom-color: #3da33d;
+    }
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .logo {
+      position: relative;
+    }
+    .logo img {
+      height: 44px;
+      width: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #3da33d;
+      background: #0f1f0f;
+      transition: all 0.3s ease;
+      animation: logoGlow 3s ease-in-out infinite;
+    }
+    @keyframes logoGlow {
+      0%, 100% { box-shadow: 0 0 10px rgba(60, 180, 60, 0.3); }
+      50% { box-shadow: 0 0 25px rgba(60, 220, 60, 0.6); }
+    }
+    .logo::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      border-top-color: #3da33d;
+      animation: logoSpin 3s linear infinite;
+    }
+    @keyframes logoSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .barangay-title {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    .best-title {
+      font-family: "Nabla", cursive;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #8cd98c, #3da33d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 0;
+      animation: titleShine 4s ease-in-out infinite;
+    }
+    @keyframes titleShine {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.3); }
+    }
+    .system-name {
+      font-family: "Zen Dots", sans-serif;
+      font-size: 0.7rem;
+      opacity: 0.7;
+      font-weight: 300;
+      color: #8fc98f;
+    }
+    .developer-credit {
+      display: inline-block;
+      font-family: "Audiowide", cursive;
+      font-size: 0.6rem;
+      opacity: 0.8;
+      animation: developerShow 14s ease-in-out infinite;
+      letter-spacing: 2px;
+      color: #5fb85f;
+    }
+    @keyframes developerShow {
+      0% { opacity: 0; transform: translateY(10px) scale(0.9); }
+      10% { opacity: 1; transform: translateY(0) scale(1.05); }
+      15% { transform: scale(1); }
+      85% { opacity: 1; transform: translateX(0) scale(1); }
+      100% { opacity: 0; transform: translateX(30px) scale(0.9); }
+    }
+    .top-menu {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .top-menu a {
+      color: #9fd49f;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+      background: transparent;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .top-menu a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(60, 200, 60, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+    .top-menu a:hover::before { left: 100%; }
+    .top-menu a i { font-size: 0.8rem; transition: transform 0.3s ease; }
+    .top-menu a:hover i { transform: scale(1.2); }
+    .top-menu a:hover,
+    .top-menu a.active {
+      background: rgba(30, 80, 30, 0.5);
+      color: #b3ffb3;
+      box-shadow: 0 0 15px rgba(60, 200, 60, 0.2);
+    }
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .notification {
+      background: rgba(20, 50, 20, 0.5);
+      backdrop-filter: blur(4px);
+      border: 1px solid #2d6a2d;
+      color: #b3f0b3;
+      padding: 0.3rem 0.7rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.3s ease;
+      animation: bellRing 2s ease-in-out infinite;
+    }
+    @keyframes bellRing {
+      0%, 100% { transform: rotate(0deg); }
+      10% { transform: rotate(15deg); }
+      20% { transform: rotate(-15deg); }
+      30% { transform: rotate(10deg); }
+      40% { transform: rotate(-10deg); }
+      50% { transform: rotate(0deg); }
+    }
+    .notification:hover {
+      box-shadow: 0 0 20px rgba(60, 200, 60, 0.3);
+      border-color: #3da33d;
+    }
+    .notification span {
+      background: #d43f3f;
+      color: white;
+      border-radius: 50%;
+      padding: 0 0.4rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      animation: badgePulse 2s ease-in-out infinite;
+    }
+    @keyframes badgePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      background: rgba(15, 35, 15, 0.6);
+      backdrop-filter: blur(4px);
+      padding: 0.2rem 0.8rem 0.2rem 0.4rem;
+      border-radius: 40px;
+      border: 1px solid #2d6a2d;
+      transition: all 0.3s ease;
+    }
+    .profile:hover {
+      border-color: #3da33d;
+      box-shadow: 0 0 20px rgba(60, 200, 60, 0.2);
+    }
+    .profile svg {
+      border-radius: 50%;
+      background: #1c3a1c;
+      width: 32px;
+      height: 32px;
+    }
+    .profile h4 { font-size: 0.8rem; font-weight: 500; color: #b3f0b3; }
+    .profile small { font-size: 0.6rem; opacity: 0.6; display: block; margin-top: -2px; color: #8fc98f; }
+    .profile i { opacity: 0.5; font-size: 0.7rem; color: #6fb86f; transition: transform 0.3s ease; }
+    .profile:hover i { transform: rotate(180deg); }
+
+    /* ===== CONTAINER & SIDEBAR ===== */
+    .container {
+      display: flex;
+      flex: 1;
+      position: relative;
+      z-index: 10;
+    }
+    .sidebar {
+      width: 220px;
+      background: rgba(10, 20, 10, 0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 1.2rem 0.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      border-right: 1px solid #2a6a2a;
+      min-height: calc(100vh - 72px);
+      position: sticky;
+      top: 72px;
+      align-self: flex-start;
+      flex-shrink: 0;
+    }
+    .side-link {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.6rem 0.9rem;
+      border-radius: 12px;
+      color: #9fd49f;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .side-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(60, 200, 60, 0.15), transparent);
+      transition: width 0.3s ease;
+    }
+    .side-link:hover::before { width: 100%; }
+    .side-link i { width: 20px; font-size: 0.95rem; color: #4d8f4d; transition: all 0.3s ease; }
+    .side-link:hover { background: rgba(30, 80, 30, 0.3); color: #b3ffb3; transform: translateX(5px); }
+    .side-link:hover i { color: #5fb85f; transform: scale(1.2); }
+    .side-link.active {
+      background: rgba(30, 80, 30, 0.4);
+      color: #b3ffb3;
+      font-weight: 600;
+      box-shadow: 0 0 15px rgba(60, 200, 60, 0.15);
+    }
+    .side-link.active i { color: #5fb85f; }
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 0.8rem 0.6rem;
+      background: rgba(15, 30, 15, 0.5);
+      backdrop-filter: blur(4px);
+      border-radius: 16px;
+      text-align: center;
+      border: 1px solid #2a5a2a;
+      transition: all 0.3s ease;
+    }
+    .sidebar-footer:hover {
+      border-color: #3da33d;
+      box-shadow: 0 0 15px rgba(60, 200, 60, 0.15);
+    }
+    .sidebar-footer h3 { font-size: 0.8rem; font-weight: 600; color: #8fc98f; }
+    .sidebar-footer span { font-size: 0.65rem; color: #5f8f5f; }
+
+    /* ===== CONTENT ===== */
+    .content {
+      flex: 1;
+      padding: 1.5rem 1.8rem 1.5rem;
+      max-width: calc(100% - 220px);
+      background: transparent;
+      overflow-x: hidden;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: rgba(10, 20, 10, 0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid #2a6a2a;
+      box-shadow: 0 8px 32px rgba(0, 20, 0, 0.4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 1.8rem;
+      border-radius: 28px;
+      margin-bottom: 1.8rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+      animation: slideInDown 0.6s ease-out;
+      transition: all 0.3s ease;
+    }
+    .hero:hover {
+      border-color: #3da33d;
+      box-shadow: 0 12px 40px rgba(60, 200, 60, 0.15);
+    }
+    @keyframes slideInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-left h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #b3f0b3;
+      background: linear-gradient(135deg, #b3f0b3, #8cd98c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-left p { color: #8fc98f; margin-top: 0.2rem; font-size: 0.95rem; }
+    .hero-right { display: flex; align-items: center; gap: 1rem; }
+    .citizen-count-badge {
+      padding: 0.25rem 0.8rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: rgba(10, 30, 10, 0.6);
+      color: #7bcb9e;
+      border: 1px solid #2a6a2a;
+      backdrop-filter: blur(4px);
+      animation: syncPulse 3s ease-in-out infinite;
+    }
+    @keyframes syncPulse {
+      0%, 100% { box-shadow: 0 0 5px rgba(60, 200, 60, 0.2); }
+      50% { box-shadow: 0 0 20px rgba(60, 200, 60, 0.4); }
+    }
+
+    /* ===== STATS CARDS ===== */
+    .stats-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: rgba(10, 20, 10, 0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid #2a6a2a;
+      box-shadow: 0 8px 32px rgba(0, 20, 0, 0.4);
+      padding: 1rem 1.2rem;
+      border-radius: 20px;
+      text-align: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: default;
+    }
+    .stat-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      border-color: #3da33d;
+      box-shadow: 0 15px 35px rgba(60, 200, 60, 0.2);
+    }
+    .stat-card .number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #b3f0b3;
+      display: block;
+    }
+    .stat-card .label {
+      font-size: 0.75rem;
+      color: #8fc98f;
+      margin-top: 0.2rem;
+    }
+    .stat-card .icon {
+      font-size: 1.5rem;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    /* ===== TABLE ===== */
+    .table-container {
+      background: rgba(10, 20, 10, 0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid #2a6a2a;
+      box-shadow: 0 8px 32px rgba(0, 20, 0, 0.4);
+      border-radius: 28px;
+      padding: 1.2rem 1.5rem 1.5rem;
+      margin-bottom: 2rem;
+      animation: fadeInUp 0.8s ease-out;
+      transition: all 0.3s ease;
+    }
+    .table-container:hover {
+      border-color: #3da33d;
+      box-shadow: 0 12px 35px rgba(60, 200, 60, 0.1);
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
+    }
+    .table-header h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #b3f0b3;
+    }
+    .table-header span {
+      font-size: 0.8rem;
+      color: #6f9f6f;
+    }
+    .table-tools {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .table-tools input,
+    .table-tools select {
+      padding: 0.4rem 0.8rem;
+      border-radius: 40px;
+      border: 1px solid #2a6a2a;
+      background: rgba(10, 25, 10, 0.6);
+      backdrop-filter: blur(4px);
+      color: #b3f0b3;
+      font-size: 0.75rem;
+      outline: none;
+      transition: all 0.3s ease;
+      max-width: 160px;
+    }
+    .table-tools input:focus,
+    .table-tools select:focus {
+      border-color: #3da33d;
+      box-shadow: 0 0 15px rgba(60, 200, 60, 0.2);
+      background: rgba(20, 35, 20, 0.7);
+    }
+    .table-tools button {
+      background: rgba(26, 74, 42, 0.7);
+      backdrop-filter: blur(4px);
+      border: 1px solid #2d6a2d;
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .table-tools button:hover {
+      background: rgba(42, 106, 58, 0.8);
+      box-shadow: 0 0 20px rgba(60, 200, 60, 0.25);
+      transform: translateY(-2px);
+    }
+    .table-wrapper {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      color: #b3f0b3;
+      min-width: 700px;
+    }
+    th {
+      text-align: left;
+      padding: 0.6rem 0.3rem 0.6rem 0;
+      font-weight: 600;
+      color: #8fc98f;
+      border-bottom: 2px solid #2a6a2a;
+      white-space: nowrap;
+    }
+    td {
+      padding: 0.6rem 0.3rem 0.6rem 0;
+      border-bottom: 1px solid #1a4a1a;
+      color: #b3e8b3;
+      transition: all 0.2s ease;
+      vertical-align: middle;
+    }
+    tr:hover td {
+      background: rgba(30, 80, 30, 0.15);
+    }
+    td .badge {
+      display: inline-block;
+      padding: 0.1rem 0.6rem;
+      border-radius: 30px;
+      font-size: 0.65rem;
+      font-weight: 600;
+    }
+    .badge.active {
+      background: rgba(60, 200, 60, 0.2);
+      color: #7bcb9e;
+      border: 1px solid #2a6a2a;
+    }
+    .badge.inactive {
+      background: rgba(200, 60, 60, 0.2);
+      color: #e07a7a;
+      border: 1px solid #6a2a2a;
+    }
+    .badge.senior {
+      background: rgba(200, 180, 60, 0.2);
+      color: #d4c75a;
+      border: 1px solid #5a4a1a;
+    }
+    .badge.voter {
+      background: rgba(60, 150, 200, 0.2);
+      color: #7bbfff;
+      border: 1px solid #2a4a6a;
+    }
+    td button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 0.1rem 0.3rem;
+      border-radius: 8px;
+      color: #6f9f6f;
+      transition: all 0.3s ease;
+    }
+    td button:hover {
+      background: rgba(30, 60, 30, 0.4);
+      color: #b3ffb3;
+      transform: scale(1.2);
+    }
+    .no-data {
+      text-align: center;
+      color: #4f7f4f;
+      font-style: italic;
+      padding: 2rem 0;
+    }
+
+    /* ===== MODAL ===== */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 10, 0, 0.7);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      animation: fadeIn 0.3s;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .modal-content {
+      background: rgba(10, 20, 10, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      margin: 20px auto;
+      padding: 1.5rem;
+      border-radius: 28px;
+      max-width: 600px;
+      width: 95%;
+      border: 1px solid #2d6a2d;
+      box-shadow: 0 20px 60px rgba(0, 20, 0, 0.7);
+      animation: slideIn 0.3s;
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+    .modal-content::-webkit-scrollbar { width: 6px; }
+    .modal-content::-webkit-scrollbar-track { background: rgba(10, 25, 10, 0.4); border-radius: 10px; }
+    .modal-content::-webkit-scrollbar-thumb { background: #2d6a2d; border-radius: 10px; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideIn { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding: 0 0 0.6rem 0;
+      border-bottom: 2px solid #2a5a2a;
+    }
+    .modal-header h2 { color: #b3f0b3; font-size: 1.2rem; }
+    .modal-header h2 i { color: #3da33d; margin-right: 0.4rem; }
+    .close-modal {
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: #5f8f5f;
+      transition: all 0.3s ease;
+      background: none;
+      border: none;
+      padding: 0 0.4rem;
+    }
+    .close-modal:hover { color: #e07a7a; transform: rotate(90deg); }
+
+    /* ===== FOOTER ===== */
+    .footer-section {
+      border-top: 1px solid #2a4a5a;
+      padding: 2.8rem 0 1.5rem;
+      margin-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      background: rgba(10, 18, 22, 0.3);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 20px;
+      padding: 2rem 2rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.8rem 2.5rem;
+    }
+    .footer-links a {
+      color: #90bcd8;
+      text-decoration: none;
+      font-weight: 400;
+      font-size: 0.95rem;
+      transition: 0.2s;
+      border-bottom: 1px dotted transparent;
+    }
+    .footer-links a:hover {
+      color: #8fcbff;
+      border-bottom-color: #4a9fd4;
+    }
+    .footer-social i {
+      font-size: 1.6rem;
+      margin-left: 1.2rem;
+      color: #4a8aaa;
+      transition: 0.2s;
+    }
+    .footer-social i:hover {
+      color: #7bbfff;
+      text-shadow: 0 0 16px #3a8ac4;
+    }
+    .copy {
+      font-size: 0.8rem;
+      color: #4a7a8a;
+      margin-top: 1.2rem;
+      width: 100%;
+      text-align: center;
+      border-top: 1px solid #1a3a4a;
+      padding-top: 1.5rem;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .content { max-width: 100%; padding: 1.2rem; }
+      .sidebar { width: 180px; padding: 1rem 0.4rem; }
+      .top-menu a { font-size: 0.7rem; padding: 0.2rem 0.5rem; }
+    }
+    @media (max-width: 768px) {
+      .topbar {
+        height: auto;
+        padding: 0.6rem 1rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.3rem;
+      }
+      .top-left { justify-content: center; flex-wrap: wrap; }
+      .top-menu { justify-content: center; }
+      .top-right { justify-content: center; }
+      .container { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.2rem;
+        padding: 0.6rem;
+        min-height: auto;
+        border-right: none;
+        border-bottom: 1px solid #2a6a2a;
+        position: static;
+      }
+      .side-link { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
+      .sidebar-footer { display: none; }
+      .content { max-width: 100%; padding: 0.8rem; }
+      .hero { flex-direction: column; text-align: center; padding: 1rem; }
+      .hero-right { justify-content: center; }
+      .table-tools { justify-content: flex-start; }
+      .table-container { padding: 0.8rem; }
+      .stats-cards { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+      .modal-content { max-width: 95%; padding: 1rem; }
+    }
+    @media (max-width: 480px) {
+      .top-menu a { font-size: 0.65rem; padding: 0.2rem 0.4rem; }
+      .stat-card .number { font-size: 1.5rem; }
+      .table-tools input,
+      .table-tools select { max-width: 100px; }
+      .table-tools button { font-size: 0.65rem; padding: 0.3rem 0.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== TOPBAR ===== -->
+  <header class="topbar">
+    <div class="top-left">
+      <div class="logo"><img src="BEST.png" alt="logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%230d170d%22/%3E%3Ctext x=%2212%22 y=%2255%22 font-family=%22Arial%22 font-size=%2220%22 fill=%22%233da33d%22 font-weight=%22bold%22%3EBEST%3C/text%3E%3C/svg%3E'" /></div>
+      <div class="barangay-title">
+        <h2 class="best-title">B.E.S.T SYSTEM</h2>
+        <span class="system-name">Barangay Electronic System for Total Community Management</span>
+        <span class="developer-credit">Developed by: Marc D. Namacpacan</span>
+      </div>
+    </div>
+    <nav class="top-menu">
+      <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="#" class="active"><i class="fa-solid fa-users"></i> Citizens</a>
+      <a href="#"><i class="fa-solid fa-user-tie"></i> Officials</a>
+      <a href="#"><i class="fa-solid fa-box"></i> Services</a>
+      <a href="#"><i class="fa-solid fa-file-lines"></i> Certificates</a>
+      <a href="#"><i class="fa-solid fa-bullhorn"></i> Announcements</a>
+      <a href="#"><i class="fa-solid fa-chart-column"></i> Reports</a>
+    </nav>
+    <div class="top-right">
+      <button class="notification"><i class="fa-solid fa-bell"></i><span>3</span></button>
+      <div class="profile">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32"><circle cx="50" cy="40" r="24" fill="#1a331a"/><circle cx="50" cy="90" r="34" fill="#1a331a"/></svg>
+        <div><h4>Admin</h4><small>Administrator</small></div>
+        <i class="fa-solid fa-angle-down"></i>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== SIDEBAR + CONTENT ===== -->
+  <div class="container">
+    <aside class="sidebar">
+      <a href="Dashboard.html" class="side-link"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
+      <a href="#" class="side-link active"><i class="fa-solid fa-users"></i> Citizens</a>
+      <a href="#" class="side-link"><i class="fa-solid fa-house"></i> Households</a>
+      <a href="#" class="side-link"><i class="fa-solid fa-user-tie"></i> Officials</a>
+      <a href="#" class="side-link"><i class="fa-solid fa-box"></i> Services</a>
+      <a href="#" class="side-link"><i class="fa-solid fa-file-lines"></i> Certificates</a>
+      <a href="#" class="side-link"><i class="fa-solid fa-bullhorn"></i> Announcements</a>
+      <a href="#" class="side-link"><i class="fa-solid fa-chart-column"></i> Reports</a>
+      <a href="#" class="side-link"><i class="fa-solid fa-gear"></i> Settings</a>
+      <div class="sidebar-footer"><h3>Serving Our Community</h3><span>Building a Better Tomorrow</span></div>
+    </aside>
+
+    <main class="content">
+      <!-- HERO -->
+      <section class="hero">
+        <div class="hero-left">
+          <h1>👥 Citizen Management</h1>
+          <p>View and manage all registered citizens of the barangay</p>
+        </div>
+        <div class="hero-right">
+          <span class="citizen-count-badge" id="totalCitizenBadge"><i class="fa-solid fa-user"></i> 0 Citizens</span>
+        </div>
+      </section>
+
+      <!-- STATS CARDS -->
+      <section class="stats-cards" id="statsCards">
+        <div class="stat-card">
+          <span class="icon">👤</span>
+          <span class="number" id="statTotal">0</span>
+          <span class="label">Total Citizens</span>
+        </div>
+        <div class="stat-card">
+          <span class="icon">👴</span>
+          <span class="number" id="statSenior">0</span>
+          <span class="label">Senior Citizens</span>
+        </div>
+        <div class="stat-card">
+          <span class="icon">🗳️</span>
+          <span class="number" id="statVoters">0</span>
+          <span class="label">Registered Voters</span>
+        </div>
+        <div class="stat-card">
+          <span class="icon">✅</span>
+          <span class="number" id="statActive">0</span>
+          <span class="label">Active Citizens</span>
+        </div>
+      </section>
+
+      <!-- TABLE -->
+      <section class="table-container">
+        <div class="table-header">
+          <div>
+            <h2><i class="fa-solid fa-list"></i> Citizens List</h2>
+            <span id="recordCount">0 records found</span>
+          </div>
+          <div class="table-tools">
+            <input type="text" placeholder="🔍 Search..." id="searchInput" />
+            <select id="barangayFilter">
+              <option value="all">All Barangay</option>
+            </select>
+            <button id="refreshBtn"><i class="fa-solid fa-rotate"></i> Refresh</button>
+            <button id="exportBtn"><i class="fa-solid fa-download"></i> Export</button>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Full Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Address</th>
+                <th>Contact</th>
+                <th>Barangay</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="citizenTableBody">
+              <tr><td colspan="9" class="no-data">— No citizens registered yet —</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <div class="footer-section">
+        <div class="footer-links">
+          <a href="#"><i class="fas fa-leaf"></i> BEST</a>
+          <a href="#">Barangay</a>
+          <a href="#">Residents</a>
+          <a href="#">Services</a>
+          <a href="#">Reports</a>
+          <a href="#">Events</a>
+          <a href="#">Health</a>
+          <a href="#">Safety</a>
+          <a href="#">About</a>
+        </div>
+        <div class="footer-social">
+          <i class="fab fa-facebook"></i>
+          <i class="fab fa-twitter"></i>
+          <i class="fab fa-youtube"></i>
+          <i class="fab fa-instagram"></i>
+        </div>
+        <div class="copy">
+          <i class="fas fa-circle" style="color: #3a8aaa; font-size: 0.4rem; margin-right: 8px;"></i>
+          BEST · Barangay Electronic System for Total Community Management
+          <i class="fas fa-circle" style="color: #3a8aaa; font-size: 0.4rem; margin-left: 8px;"></i>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ===== DETAIL VIEW MODAL ===== -->
+  <div id="detailModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><i class="fa-solid fa-user"></i> Citizen Details</h2>
+        <button class="close-modal" id="closeDetailModal">&times;</button>
+      </div>
+      <div id="detailContent" style="color: #b3e8b3; line-height: 1.8;">
+        <p style="color: #5f8f5f; text-align: center;">Select a citizen to view details</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // ===== ELEMENTS =====
+      const tbody = document.getElementById('citizenTableBody');
+      const searchInput = document.getElementById('searchInput');
+      const filterSelect = document.getElementById('barangayFilter');
+      const refreshBtn = document.getElementById('refreshBtn');
+      const exportBtn = document.getElementById('exportBtn');
+      const totalBadge = document.getElementById('totalCitizenBadge');
+      const statTotal = document.getElementById('statTotal');
+      const statSenior = document.getElementById('statSenior');
+      const statVoters = document.getElementById('statVoters');
+      const statActive = document.getElementById('statActive');
+      const recordCount = document.getElementById('recordCount');
+      const detailModal = document.getElementById('detailModal');
+      const closeDetailBtn = document.getElementById('closeDetailModal');
+      const detailContent = document.getElementById('detailContent');
+
+      // ===== DATA =====
+      let citizens = [];
+      let barangays = [];
+
+      // ===== LOAD DATA FROM localStorage =====
+      function loadData() {
+        try {
+          const c = localStorage.getItem('citizenData');
+          const b = localStorage.getItem('barangayData');
+          if (c) citizens = JSON.parse(c);
+          else citizens = [];
+          if (b) barangays = JSON.parse(b);
+          else {
+            barangays = [
+              { name: "Anahawon", code: "BRGY-001" },
+              { name: "Base Camp", code: "BRGY-002" },
+              { name: "Bayabason", code: "BRGY-003" },
+              { name: "Camp I", code: "BRGY-004" },
+              { name: "Colambugan", code: "BRGY-005" },
+              { name: "Dagumba-an", code: "BRGY-006" },
+              { name: "Danggawan", code: "BRGY-007" },
+              { name: "Dologon", code: "BRGY-008" },
+              { name: "Kisanday", code: "BRGY-009" },
+              { name: "Kuya", code: "BRGY-010" },
+              { name: "La Roxas", code: "BRGY-011" },
+              { name: "Panadtalan", code: "BRGY-012" },
+              { name: "Panalsalan", code: "BRGY-013" },
+              { name: "North Poblacion", code: "BRGY-014" },
+              { name: "South Poblacion", code: "BRGY-015" },
+              { name: "San Miguel", code: "BRGY-016" },
+              { name: "San Roque", code: "BRGY-017" },
+              { name: "Tubigon", code: "BRGY-018" },
+              { name: "Bagongsilang", code: "BRGY-019" },
+              { name: "Kiharong", code: "BRGY-020" }
+            ];
+          }
+        } catch (e) {
+          citizens = [];
+          barangays = [{ name: "Anahawon", code: "BRGY-001" }];
+        }
+        updateFilterOptions();
+      }
+
+      // ===== UPDATE FILTER DROPDOWN =====
+      function updateFilterOptions() {
+        const current = filterSelect.value;
+        filterSelect.innerHTML = '<option value="all">All Barangay</option>';
+        barangays.forEach(b => {
+          const opt = document.createElement('option');
+          opt.value = b.name;
+          opt.textContent = b.name + ' (' + b.code + ')';
+          filterSelect.appendChild(opt);
+        });
+        if (barangays.some(b => b.name === current)) filterSelect.value = current;
+        else filterSelect.value = 'all';
+      }
+
+      // ===== RENDER TABLE =====
+      function renderTable(filter = 'all', search = '') {
+        let list = citizens;
+
+        // Filter by barangay
+        if (filter !== 'all') {
+          list = list.filter(c => c.barangay === filter);
+        }
+
+        // Search
+        if (search.trim()) {
+          const s = search.trim().toLowerCase();
+          list = list.filter(c =>
+            (c.fullName && c.fullName.toLowerCase().includes(s)) ||
+            (c.firstName && c.firstName.toLowerCase().includes(s)) ||
+            (c.lastName && c.lastName.toLowerCase().includes(s)) ||
+            (c.address && c.address.toLowerCase().includes(s)) ||
+            (c.id && c.id.toLowerCase().includes(s)) ||
+            (c.contact && c.contact.includes(s))
+          );
+        }
+
+        // Update stats
+        updateStats(list);
+
+        // Update badge
+        totalBadge.innerHTML = `<i class="fa-solid fa-user"></i> ${citizens.length} Citizens`;
+
+        // Update record count
+        recordCount.textContent = `${list.length} records found`;
+
+        // Render table
+        if (list.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="9" class="no-data">— No citizens found —</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = list.map(c => `
+          <tr>
+            <td><strong>${c.id}</strong></td>
+            <td>${c.fullName || c.firstName + ' ' + (c.middleName || '') + ' ' + c.lastName}</td>
+            <td>${c.age}</td>
+            <td>${c.gender}</td>
+            <td>${c.address}</td>
+            <td>${c.contact}</td>
+            <td><span style="color:#8fc98f;font-size:0.75rem;">${c.barangay}</span></td>
+            <td>
+              <span class="badge ${c.status === 'Active' ? 'active' : 'inactive'}">${c.status || 'Active'}</span>
+              ${c.isSenior === 'Yes' ? '<span class="badge senior">Senior</span>' : ''}
+              ${c.isVoter === 'Yes' ? '<span class="badge voter">Voter</span>' : ''}
+            </td>
+            <td>
+              <button onclick="window.viewCitizen('${c.id}')" title="View Details"><i class="fa-solid fa-eye"></i></button>
+              <button onclick="window.deleteCitizen('${c.id}')" title="Delete"><i class="fa-solid fa-trash" style="color:#d95b5b;"></i></button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // ===== UPDATE STATS =====
+      function updateStats(list) {
+        const total = list.length;
+        const senior = list.filter(c => c.isSenior === 'Yes').length;
+        const voters = list.filter(c => c.isVoter === 'Yes').length;
+        const active = list.filter(c => c.status === 'Active' || !c.status).length;
+
+        statTotal.textContent = total;
+        statSenior.textContent = senior;
+        statVoters.textContent = voters;
+        statActive.textContent = active;
+      }
+
+      // ===== VIEW CITIZEN DETAILS (UPDATED WITH NAME PARTS) =====
+      window.viewCitizen = function(id) {
+        const citizen = citizens.find(c => c.id === id);
+        if (!citizen) {
+          detailContent.innerHTML = '<p style="color:#e07a7a;">Citizen not found.</p>';
+          detailModal.style.display = 'block';
+          document.body.style.overflow = 'hidden';
+          return;
+        }
+
+        // Build name display
+        const firstName = citizen.firstName || 'N/A';
+        const middleName = citizen.middleName || 'N/A';
+        const lastName = citizen.lastName || 'N/A';
+        const maidenName = citizen.maidenName || 'N/A';
+
+        detailContent.innerHTML = `
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem 1.5rem;padding:0.5rem 0;">
+            <!-- NAME SECTION -->
+            <div style="grid-column:1/-1;margin-bottom:0.3rem;border-bottom:1px solid #2a5a2a;padding-bottom:0.3rem;">
+              <strong style="color:#8fc98f;font-size:0.9rem;">👤 PERSONAL INFORMATION</strong>
+            </div>
+            <div><strong style="color:#8fc98f;">ID:</strong> ${citizen.id}</div>
+            <div><strong style="color:#8fc98f;">Full Name:</strong> ${citizen.fullName || firstName + ' ' + middleName + ' ' + lastName}</div>
+            <div><strong style="color:#8fc98f;">First Name:</strong> ${firstName}</div>
+            <div><strong style="color:#8fc98f;">Middle Name:</strong> ${middleName}</div>
+            <div><strong style="color:#8fc98f;">Last Name:</strong> ${lastName}</div>
+            <div><strong style="color:#8fc98f;">Maiden Name:</strong> ${maidenName}</div>
+            <div><strong style="color:#8fc98f;">Age:</strong> ${citizen.age}</div>
+            <div><strong style="color:#8fc98f;">Gender:</strong> ${citizen.gender}</div>
+
+            <!-- CONTACT & ADDRESS -->
+            <div style="grid-column:1/-1;margin-top:0.5rem;margin-bottom:0.3rem;border-bottom:1px solid #2a5a2a;padding-bottom:0.3rem;">
+              <strong style="color:#8fc98f;font-size:0.9rem;">📍 CONTACT & ADDRESS</strong>
+            </div>
+            <div><strong style="color:#8fc98f;">Address:</strong> ${citizen.address}</div>
+            <div><strong style="color:#8fc98f;">Contact:</strong> ${citizen.contact}</div>
+            <div><strong style="color:#8fc98f;">Email:</strong> ${citizen.email || 'N/A'}</div>
+            <div><strong style="color:#8fc98f;">Barangay:</strong> ${citizen.barangay}</div>
+
+            <!-- OTHER DETAILS -->
+            <div style="grid-column:1/-1;margin-top:0.5rem;margin-bottom:0.3rem;border-bottom:1px solid #2a5a2a;padding-bottom:0.3rem;">
+              <strong style="color:#8fc98f;font-size:0.9rem;">📋 ADDITIONAL INFORMATION</strong>
+            </div>
+            <div><strong style="color:#8fc98f;">Birth Date:</strong> ${citizen.birthdate || 'N/A'}</div>
+            <div><strong style="color:#8fc98f;">Civil Status:</strong> ${citizen.civilStatus || 'N/A'}</div>
+            <div><strong style="color:#8fc98f;">Occupation:</strong> ${citizen.occupation || 'N/A'}</div>
+            <div><strong style="color:#8fc98f;">Status:</strong> <span class="badge ${citizen.status === 'Active' ? 'active' : 'inactive'}">${citizen.status || 'Active'}</span></div>
+            <div><strong style="color:#8fc98f;">Senior Citizen:</strong> ${citizen.isSenior === 'Yes' ? '✅ Yes' : '❌ No'}</div>
+            <div><strong style="color:#8fc98f;">Registered Voter:</strong> ${citizen.isVoter === 'Yes' ? '✅ Yes' : '❌ No'}</div>
+            <div style="grid-column:1/-1;"><strong style="color:#8fc98f;">Additional Info:</strong> ${citizen.additionalInfo || 'N/A'}</div>
+          </div>
+        `;
+        detailModal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      };
+
+      // ===== DELETE CITIZEN =====
+      window.deleteCitizen = function(id) {
+        if (!confirm('Are you sure you want to delete this citizen?')) return;
+        citizens = citizens.filter(c => c.id !== id);
+        saveToLocalStorage();
+        renderTable(filterSelect.value, searchInput.value);
+      };
+
+      // ===== SAVE TO localStorage =====
+      function saveToLocalStorage() {
+        try {
+          localStorage.setItem('citizenData', JSON.stringify(citizens));
+        } catch (e) {}
+      }
+
+      // ===== EXPORT DATA =====
+      function exportData() {
+        if (citizens.length === 0) {
+          alert('No citizen data to export.');
+          return;
+        }
+
+        const headers = ['ID', 'First Name', 'Middle Name', 'Last Name', 'Maiden Name', 'Full Name', 'Age', 'Gender', 'Address', 'Contact', 'Email', 'Barangay', 'Status', 'Senior Citizen', 'Registered Voter', 'Civil Status', 'Occupation', 'Birth Date', 'Additional Info'];
+        const rows = citizens.map(c => [
+          c.id,
+          c.firstName || 'N/A',
+          c.middleName || 'N/A',
+          c.lastName || 'N/A',
+          c.maidenName || 'N/A',
+          c.fullName || c.firstName + ' ' + (c.middleName || '') + ' ' + c.lastName,
+          c.age,
+          c.gender,
+          c.address,
+          c.contact,
+          c.email || 'N/A',
+          c.barangay,
+          c.status || 'Active',
+          c.isSenior || 'No',
+          c.isVoter || 'No',
+          c.civilStatus || 'N/A',
+          c.occupation || 'N/A',
+          c.birthdate || 'N/A',
+          c.additionalInfo || 'N/A'
+        ]);
+
+        let csv = headers.join(',') + '\n';
+        rows.forEach(row => {
+          csv += row.map(val => `"${val}"`).join(',') + '\n';
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `citizens_export_${new Date().toISOString().slice(0,10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      // ===== EVENT LISTENERS =====
+      searchInput.addEventListener('input', function() {
+        renderTable(filterSelect.value, this.value);
+      });
+
+      filterSelect.addEventListener('change', function() {
+        renderTable(this.value, searchInput.value);
+      });
+
+      refreshBtn.addEventListener('click', function() {
+        loadData();
+        renderTable(filterSelect.value, searchInput.value);
+        this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Refreshing...';
+        setTimeout(() => {
+          this.innerHTML = '<i class="fa-solid fa-rotate"></i> Refresh';
+        }, 800);
+      });
+
+      exportBtn.addEventListener('click', exportData);
+
+      // Modal controls
+      closeDetailBtn.addEventListener('click', function() {
+        detailModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      });
+
+      window.addEventListener('click', function(e) {
+        if (e.target === detailModal) {
+          detailModal.style.display = 'none';
+          document.body.style.overflow = 'auto';
+        }
+      });
+
+      // ===== SIDEBAR NAVIGATION =====
+      document.querySelectorAll('.side-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href && href !== '#' && !href.startsWith('javascript')) {
+            window.location.href = href;
+          }
+        });
+      });
+
+      // Top menu navigation
+      document.querySelectorAll('.top-menu a').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href && href !== '#' && !href.startsWith('javascript')) {
+            window.location.href = href;
+          } else if (href === '#') {
+            e.preventDefault();
+          }
+        });
+      });
+
+      // Profile click
+      document.querySelector('.profile')?.addEventListener('click', function() {
+        alert('👤 Admin Profile');
+      });
+
+      // Notification click
+      document.querySelector('.notification')?.addEventListener('click', function(e) {
+        e.stopPropagation();
+        alert('🔔 3 notifications');
+      });
+
+      // ===== INIT =====
+      function init() {
+        loadData();
+        renderTable('all', '');
+        console.log('✅ Citizen page loaded with ' + citizens.length + ' citizens.');
+      }
+
+      init();
+
+      // ===== AUTO-REFRESH every 30 seconds =====
+      setInterval(() => {
+        loadData();
+        renderTable(filterSelect.value, searchInput.value);
+      }, 30000);
+
+    })();
+  </script>
+
+</body>
+</html>
