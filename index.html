@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BEST · Barangay Electronic System</title>
+  <!-- Font Awesome 6 (Free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: #0b0e0f;
+      /* === CUSTOM BACKGROUND IMAGE === */
+      background-image: url('BEST.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      color: #d4eaf7;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      width: 100%;
+    }
+
+    /* ===== SPLASH SCREEN OVERLAY ===== */
+    #splashScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    #splashScreen.active {
+      display: flex;
+    }
+
+    .splash-content {
+      text-align: center;
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+
+    .splash-content img {
+      max-width: 400px;
+      width: 80%;
+      height: auto;
+      border-radius: 30px;
+      box-shadow: 0 0 60px rgba(60, 160, 220, 0.3);
+      border: 2px solid rgba(60, 160, 220, 0.2);
+      animation: fadeInOut 1.5s ease-in-out infinite;
+    }
+
+    .splash-content .loading-text {
+      margin-top: 2rem;
+      color: #8fcbff;
+      font-size: 1.2rem;
+      font-weight: 300;
+      letter-spacing: 4px;
+      animation: pulseText 1.5s ease-in-out infinite;
+    }
+
+    .splash-content .loading-dots {
+      display: inline-block;
+      animation: dots 1.5s steps(4, end) infinite;
+    }
+
+    @keyframes fadeInOut {
+      0% { opacity: 0.6; transform: scale(0.95); }
+      50% { opacity: 1; transform: scale(1.02); }
+      100% { opacity: 0.6; transform: scale(0.95); }
+    }
+
+    @keyframes pulseGlow {
+      0% { filter: drop-shadow(0 0 10px rgba(60, 160, 220, 0.1)); }
+      50% { filter: drop-shadow(0 0 30px rgba(60, 160, 220, 0.3)); }
+      100% { filter: drop-shadow(0 0 10px rgba(60, 160, 220, 0.1)); }
+    }
+
+    @keyframes pulseText {
+      0% { opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { opacity: 0.5; }
+    }
+
+    @keyframes dots {
+      0% { content: ''; }
+      25% { content: '.'; }
+      50% { content: '..'; }
+      75% { content: '...'; }
+      100% { content: ''; }
+    }
+
+    .loading-dots::after {
+      content: '';
+      animation: dots 1.5s steps(4, end) infinite;
+    }
+
+    /* ===== NAVIGATION with glass effect & light blue ===== */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid #2a4a5a;
+      flex-wrap: wrap;
+      gap: 1rem 0;
+      background: rgba(10, 18, 22, 0.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 0 0 20px 20px;
+      padding: 1rem 2rem;
+      margin: 0 -1rem;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #8fcbff;
+      text-shadow: 0 0 6px #1a4a6a;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .logo i {
+      font-size: 2rem;
+      color: #7bbfff;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      font-weight: 500;
+      font-size: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: #b0d8f5;
+      text-decoration: none;
+      transition: 0.2s;
+      padding: 0.3rem 0;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover {
+      color: #8fcbff;
+      border-bottom-color: #66b5ff;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.8rem;
+    }
+
+    .login-btn {
+      background: rgba(10, 22, 30, 0.5);
+      backdrop-filter: blur(4px);
+      border: 1.5px solid #4a9fd4;
+      color: #8fcbff;
+      padding: 0.5rem 1.4rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: default;
+      transition: 0.2s;
+      letter-spacing: 0.3px;
+      box-shadow: 0 0 6px rgba(0, 150, 255, 0.1);
+    }
+
+    .login-btn i {
+      margin-right: 8px;
+      color: #7bbfff;
+    }
+
+    .login-btn:hover {
+      background: rgba(20, 50, 70, 0.7);
+      border-color: #66b5ff;
+      box-shadow: 0 0 14px #2a7abf;
+    }
+
+    /* ----- HERO with glass effect & light blue ----- */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 4rem 1rem 3rem;
+      background: rgba(10, 18, 22, 0.5);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 48px;
+      margin: 2.8rem 0 3rem;
+      border: 1px solid #2a4a5a;
+      box-shadow: 0 12px 40px rgba(0, 10, 20, 0.9);
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(10, 35, 50, 0.7);
+      backdrop-filter: blur(4px);
+      color: #8fcbff;
+      padding: 0.4rem 1.4rem;
+      border-radius: 60px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      border: 1px solid #3a7a9a;
+      margin-bottom: 2rem;
+    }
+
+    .hero-badge i {
+      margin-right: 8px;
+      color: #66b5ff;
+    }
+
+    .hero-headline {
+      font-size: 2.6rem;
+      font-weight: 700;
+      line-height: 1.3;
+      color: #d4eaf7;
+      text-shadow: 0 0 18px #1a4a6a;
+      max-width: 900px;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-headline .highlight {
+      background: linear-gradient(145deg, #7bbfff, #3d8fc4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 30px #2a7abf;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      max-width: 700px;
+      color: #b0d8f5;
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+      font-weight: 400;
+      padding: 0 0.5rem;
+    }
+
+    /* ----- feature cards with glass effect & light blue ----- */
+    .features-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      margin: 4rem 0 3rem;
+    }
+
+    .feature-card {
+      background: rgba(10, 18, 22, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid #2a4a5a;
+      border-radius: 40px;
+      padding: 2.2rem 2rem;
+      flex: 1 1 220px;
+      max-width: 280px;
+      transition: 0.2s;
+      box-shadow: 0 8px 20px rgba(0, 10, 20, 0.7);
+      text-align: center;
+    }
+
+    .feature-card:hover {
+      border-color: #5a9acf;
+      box-shadow: 0 0 28px #1a5a8a;
+      transform: translateY(-6px);
+    }
+
+    .feature-card i {
+      font-size: 3.2rem;
+      color: #66b5ff;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 18px #1a5a8a;
+    }
+
+    .feature-card h3 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #c8e6ff;
+      letter-spacing: -0.3px;
+      margin-bottom: 0.4rem;
+    }
+
+    .feature-card p {
+      color: #a0c8e8;
+      font-weight: 400;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .feature-card .tag {
+      display: inline-block;
+      margin-top: 0.8rem;
+      background: rgba(15, 40, 55, 0.7);
+      padding: 0.2rem 1rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: #8fcbff;
+      border: 1px solid #3a7a9a;
+    }
+
+    /* ----- footer with glass effect & light blue ----- */
+    .footer-section {
+      border-top: 1px solid #2a4a5a;
+      padding: 2.8rem 0 1.5rem;
+      margin-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      background: rgba(10, 18, 22, 0.3);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 20px;
+      padding: 2rem 2rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.8rem 2.5rem;
+    }
+
+    .footer-links a {
+      color: #90bcd8;
+      text-decoration: none;
+      font-weight: 400;
+      font-size: 0.95rem;
+      transition: 0.2s;
+      border-bottom: 1px dotted transparent;
+    }
+
+    .footer-links a:hover {
+      color: #8fcbff;
+      border-bottom-color: #4a9fd4;
+    }
+
+    .footer-social i {
+      font-size: 1.6rem;
+      margin-left: 1.2rem;
+      color: #4a8aaa;
+      transition: 0.2s;
+    }
+
+    .footer-social i:hover {
+      color: #7bbfff;
+      text-shadow: 0 0 16px #3a8ac4;
+    }
+
+    .copy {
+      font-size: 0.8rem;
+      color: #4a7a8a;
+      margin-top: 1.2rem;
+      width: 100%;
+      text-align: center;
+      border-top: 1px solid #1a3a4a;
+      padding-top: 1.5rem;
+    }
+
+    /* ----- responsive ----- */
+    @media (max-width: 780px) {
+      .navbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        padding: 1rem;
+      }
+      .nav-links {
+        justify-content: center;
+        gap: 1.2rem;
+        font-size: 0.95rem;
+      }
+      .nav-actions {
+        justify-content: center;
+        margin-top: 0.2rem;
+      }
+      .hero-headline {
+        font-size: 2.0rem;
+      }
+      .hero p {
+        font-size: 1.1rem;
+      }
+      .feature-card {
+        flex: 1 1 160px;
+      }
+      .footer-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 1.5rem;
+      }
+      .footer-links {
+        justify-content: center;
+      }
+      .splash-content img {
+        max-width: 280px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 1rem;
+      }
+      .hero {
+        padding: 2.5rem 0.5rem;
+      }
+      .hero-headline {
+        font-size: 1.7rem;
+      }
+      .navbar {
+        padding: 0.5rem;
+      }
+      .splash-content img {
+        max-width: 200px;
+      }
+      .splash-content .loading-text {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== SPLASH SCREEN ===== -->
+  <div id="splashScreen">
+    <div class="splash-content">
+      <img src="BEST.png" alt="BEST Logo" id="splashImage">
+      <div class="loading-text">
+        Loading<span class="loading-dots"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- NAVIGATION : BEST branding -->
+    <nav class="navbar">
+      <div class="logo">
+        <i class="fas fa-leaf"></i> BEST
+      </div>
+      <div class="nav-links">
+        <a href="#" id="dashboardLink"><i class="fas fa-home" style="margin-right: 5px;"></i>Dashboard</a>
+        <a href="#">Barangay</a>
+        <a href="#">Residents</a>
+        <a href="#">Services</a>
+        <a href="#">Reports</a>
+        <a href="#">Events</a>
+        <a href="#">Health</a>
+        <a href="#">Safety</a>
+        <a href="#">About</a>
+      </div>
+      <div class="nav-actions">
+        <span class="login-btn"><i class="fas fa-user-circle"></i> Log In</span>
+      </div>
+    </nav>
+
+    <!-- HERO : headline as one paragraph, smaller font -->
+    <div class="hero">
+      <div class="hero-badge">
+        <i class="fas fa-users-between-lines"></i> BARANGAY · ELECTRONIC · TOTAL COMMUNITY
+      </div>
+
+      <p class="hero-headline">
+        <span class="highlight">BEST</span> · Barangay Electronic System for Total Community Management
+      </p>
+
+      <p>
+        Streamline governance, empower residents, and build a connected barangay.<br>
+        Real‑time data, transparent services, and community engagement — all in one light blue &amp; black platform.
+      </p>
+    </div>
+
+    <!-- FEATURE CARDS : core BEST modules (light blue & black) -->
+    <div class="features-grid">
+      <div class="feature-card">
+        <i class="fas fa-people-arrows"></i>
+        <h3>Resident Hub</h3>
+        <p>Digital IDs, requests, and community feedback – all in one dashboard.</p>
+        <span class="tag"><i class="fas fa-circle" style="color: #66b5ff; font-size: 0.5rem;"></i> TOTAL</span>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-chart-simple"></i>
+        <h3>Barangay Analytics</h3>
+        <p>Real‑time reports on health, safety, and service performance.</p>
+        <span class="tag"><i class="fas fa-star" style="color: #7bbfff;"></i> SMART</span>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-hand-holding-heart"></i>
+        <h3>Community Services</h3>
+        <p>Emergency alerts, event calendars, and volunteer coordination.</p>
+        <span class="tag"><i class="fas fa-globe-americas"></i> CONNECT</span>
+      </div>
+    </div>
+
+    <!-- FOOTER : BEST footer with links & social -->
+    <div class="footer-section">
+      <div class="footer-links">
+        <a href="#"><i class="fas fa-leaf"></i> BEST</a>
+        <a href="#">Barangay</a>
+        <a href="#">Residents</a>
+        <a href="#">Services</a>
+        <a href="#">Reports</a>
+        <a href="#">Events</a>
+        <a href="#">Health</a>
+        <a href="#">Safety</a>
+        <a href="#">About</a>
+      </div>
+      <div class="footer-social">
+        <i class="fab fa-facebook"></i>
+        <i class="fab fa-twitter"></i>
+        <i class="fab fa-youtube"></i>
+        <i class="fab fa-instagram"></i>
+      </div>
+      <div class="copy">
+        <i class="fas fa-circle" style="color: #3a8aaa; font-size: 0.4rem; margin-right: 8px;"></i>
+        BEST · Barangay Electronic System for Total Community Management
+        <i class="fas fa-circle" style="color: #3a8aaa; font-size: 0.4rem; margin-left: 8px;"></i>
+      </div>
+    </div>
+
+  </div> <!-- /container -->
+
+  <script>
+    (function() {
+      'use strict';
+
+      const splashScreen = document.getElementById('splashScreen');
+      const dashboardLink = document.getElementById('dashboardLink');
+
+      // ===== FUNCTION: Show splash screen with fade in/out =====
+      function showSplashAndNavigate(targetUrl) {
+        // Show splash screen
+        splashScreen.classList.add('active');
+
+        // Start fade in/out animation (already running via CSS)
+        // After 5 seconds, navigate to dashboard
+        setTimeout(function() {
+          // Navigate to the target URL
+          window.location.href = targetUrl;
+        }, 5000); // 5 seconds
+      }
+
+      // ===== DASHBOARD LINK CLICK =====
+      dashboardLink.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // Path to your Dashboard.html
+        const dashboardPath = 'Dashboard.html';
+
+        // Show splash screen with fade effect, then navigate
+        showSplashAndNavigate(dashboardPath);
+      });
+
+      // ===== (Optional) Also handle any other links that might need splash =====
+      // You can add more links here if needed
+
+      console.log('✅ BEST page ready. Click Dashboard to see splash effect.');
+    })();
+  </script>
+
+</body>
+</html>
