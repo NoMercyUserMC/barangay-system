@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>B.E.S.T · Barangay System · Black & Green</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Nabla&family=Zen+Dots&family=Audiowide&display=swap" rel="stylesheet" />
@@ -1826,10 +1826,9 @@
         }
 
         /* ============================================================
-               WAIFU (Live2D) STYLES — Dark theme integration
+               WAIFU (Live2D) STYLES — Mobile‑friendly
                ============================================================ */
 
-        /* Container for the entire waifu widget */
         .waifu-container {
             position: fixed;
             bottom: 20px;
@@ -1839,13 +1838,12 @@
             flex-direction: column;
             align-items: flex-end;
             pointer-events: none;
-            /* allow clicks to pass through except on interactive parts */;
         }
         .waifu-container * {
             pointer-events: auto;
         }
 
-        /* The canvas (Live2D model) */
+        /* Desktop size */
         #live2d-canvas {
             width: 240px;
             height: 280px;
@@ -1865,7 +1863,6 @@
             filter: drop-shadow(0 0 20px rgba(60, 200, 60, 0.15));
         }
 
-        /* Speech bubble (waifu-tips) */
         .waifu-tips {
             background: rgba(10, 20, 10, 0.88);
             backdrop-filter: blur(16px);
@@ -1896,7 +1893,6 @@
             border-top: 14px solid rgba(10, 20, 10, 0.88);
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
         }
-        /* small decorative glow on the tip */
         .waifu-tips::before {
             content: '';
             position: absolute;
@@ -1920,18 +1916,16 @@
                 transform: translateY(-6px);
             }
         }
-
-        /* Hide tips when empty or loading */
         .waifu-tips:empty {
             display: none;
         }
 
-        /* Small screen adjustments */
+        /* --- Mobile overrides --- */
         @media (max-width: 768px) {
             .waifu-container {
-                bottom: 10px;
-                right: 10px;
-                transform: scale(0.82);
+                bottom: 12px;
+                right: 12px;
+                transform: scale(0.75);
                 transform-origin: bottom right;
             }
             #live2d-canvas {
@@ -1942,22 +1936,43 @@
                 max-width: 200px;
                 font-size: 0.78rem;
                 padding: 10px 14px;
+                min-width: 120px;
             }
         }
         @media (max-width: 480px) {
             .waifu-container {
-                transform: scale(0.68);
-                bottom: 4px;
-                right: 4px;
+                bottom: 8px;
+                right: 8px;
+                transform: scale(0.65);
+                transform-origin: bottom right;
             }
             #live2d-canvas {
                 width: 150px;
-                height: 180px;
+                height: 175px;
             }
             .waifu-tips {
                 max-width: 160px;
                 font-size: 0.7rem;
                 padding: 8px 12px;
+                min-width: 100px;
+            }
+        }
+        /* For very small screens, we keep it visible */
+        @media (max-width: 360px) {
+            .waifu-container {
+                transform: scale(0.55);
+                bottom: 4px;
+                right: 4px;
+            }
+            #live2d-canvas {
+                width: 130px;
+                height: 150px;
+            }
+            .waifu-tips {
+                max-width: 130px;
+                font-size: 0.6rem;
+                padding: 6px 10px;
+                min-width: 80px;
             }
         }
     </style>
@@ -2221,41 +2236,27 @@
 
         // ─── Wait for the widget to load, then inject our tip styling ───
         document.addEventListener('DOMContentLoaded', function() {
-            // The live2d-widget will create #waifu-tips and #live2d
-            // We already have them in our container, but the widget might replace them.
-            // We'll observe and re-apply our styles if needed.
             const observer = new MutationObserver(function() {
                 const tips = document.getElementById('waifu-tips');
                 if (tips) {
-                    // Ensure our class stays
                     if (!tips.classList.contains('waifu-tips')) {
                         tips.classList.add('waifu-tips');
                     }
                 }
             });
             observer.observe(document.body, { childList: true, subtree: true });
-
-            // Also, if the widget creates its own container, we adapt.
-            // But we already have our container with the right IDs.
             console.log('🧡 Waifu guide ready — B.E.S.T is here to help!');
         });
 
-        // ─── Override the widget's tip positioning to use our container ───
-        // The autoload.js will look for #waifu-tips and #live2d.
-        // We already have them inside .waifu-container, so it should work.
-        // We also set pointer-events: auto on children so clicks work.
-
         // ─── Helper: force a tip to show on load ───
         window.addEventListener('load', function() {
-            // After the widget loads, show a welcome tip
             setTimeout(function() {
                 const tips = document.getElementById('waifu-tips');
                 if (tips) {
                     const welcomeMsg =
-                        "👋 Welcome to B.E.S.T! I'm your virtual guide. Click around and I'll help you learn the system!";
+                        "👋 Welcome to B.E.S.T! I'm your virtual guide. Click/tap me and I'll help you learn the system!";
                     tips.innerHTML = welcomeMsg;
                     tips.style.opacity = '1';
-                    // Auto-hide after 8 seconds
                     setTimeout(function() {
                         tips.style.opacity = '0';
                         setTimeout(function() { tips.innerHTML = ''; }, 400);
@@ -2264,25 +2265,37 @@
             }, 3500);
         });
 
-        // ─── Click on the waifu to show a random tip ───
+        // ─── Click/tap on the waifu to show a random tip ───
+        function showWaifuTip() {
+            const tips = document.getElementById('waifu-tips');
+            if (tips) {
+                const msgs = window.waifu.messages || [];
+                const msg = msgs[Math.floor(Math.random() * msgs.length)] || "😊 Click around to explore B.E.S.T!";
+                tips.innerHTML = msg;
+                tips.style.opacity = '1';
+                setTimeout(function() {
+                    tips.style.opacity = '0';
+                    setTimeout(function() { tips.innerHTML = ''; }, 400);
+                }, 6000);
+            }
+        }
+
+        // For both click and touch events
         document.addEventListener('click', function(e) {
             const canvas = document.querySelector('#live2d-canvas canvas');
             if (canvas && (e.target === canvas || canvas.contains(e.target))) {
-                const tips = document.getElementById('waifu-tips');
-                if (tips) {
-                    const msgs = window.waifu.messages || [];
-                    const msg = msgs[Math.floor(Math.random() * msgs.length)] || "😊 Click around to explore B.E.S.T!";
-                    tips.innerHTML = msg;
-                    tips.style.opacity = '1';
-                    setTimeout(function() {
-                        tips.style.opacity = '0';
-                        setTimeout(function() { tips.innerHTML = ''; }, 400);
-                    }, 6000);
-                }
+                showWaifuTip();
+            }
+        });
+        document.addEventListener('touchstart', function(e) {
+            const canvas = document.querySelector('#live2d-canvas canvas');
+            if (canvas && (e.target === canvas || canvas.contains(e.target))) {
+                showWaifuTip();
+                e.preventDefault(); // avoid double-firing on mobile
             }
         });
 
-        // ─── Also show a tip when hovering over the waifu ───
+        // ─── Also show a tip when hovering (desktop) or tapping (mobile) the waifu ───
         document.addEventListener('mouseover', function(e) {
             const canvas = document.querySelector('#live2d-canvas canvas');
             if (canvas && (e.target === canvas || canvas.contains(e.target))) {
@@ -2290,7 +2303,7 @@
                 if (tips && !tips.innerHTML) {
                     const waiting = window.waifu.text?.waiting || [];
                     const msg = waiting[Math.floor(Math.random() * waiting.length)] ||
-                        "👋 Need help? Click me for tips!";
+                        "👋 Need help? Tap me for tips!";
                     tips.innerHTML = msg;
                     tips.style.opacity = '1';
                     setTimeout(function() {
@@ -2497,7 +2510,6 @@
                 link.addEventListener('click', function(e) {
                     const href = this.getAttribute('href');
                     if (href && href !== '#') {
-                        // Let the browser navigate
                         return;
                     }
                     e.preventDefault();
