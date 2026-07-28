@@ -1822,6 +1822,142 @@
                 padding: 0.3rem 0.6rem !important;
             }
         }
+
+        /* ============================================================
+               WAIFU (Live2D) STYLES — Dark theme integration
+               ============================================================ */
+
+        /* Container for the entire waifu widget */
+        .waifu-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            pointer-events: none;
+            /* allow clicks to pass through except on interactive parts */;
+        }
+        .waifu-container * {
+            pointer-events: auto;
+        }
+
+        /* The canvas (Live2D model) */
+        #live2d-canvas {
+            width: 240px;
+            height: 280px;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        #live2d-canvas:hover {
+            transform: scale(1.04);
+        }
+        #live2d-canvas canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(60, 200, 60, 0.15));
+        }
+
+        /* Speech bubble (waifu-tips) */
+        .waifu-tips {
+            background: rgba(10, 20, 10, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid #3da33d;
+            border-radius: 18px 18px 18px 4px;
+            padding: 14px 20px;
+            margin-bottom: 10px;
+            max-width: 300px;
+            min-width: 160px;
+            color: #d4f0d4;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            box-shadow: 0 12px 40px rgba(0, 30, 0, 0.7), 0 0 0 1px rgba(60, 200, 60, 0.15);
+            position: relative;
+            animation: waifuTipFloat 4s ease-in-out infinite;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            word-break: break-word;
+            pointer-events: auto;
+        }
+        .waifu-tips::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            right: 28px;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 14px solid rgba(10, 20, 10, 0.88);
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+        /* small decorative glow on the tip */
+        .waifu-tips::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 18px 18px 18px 4px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(60, 200, 60, 0.2), transparent 60%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        @keyframes waifuTipFloat {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        /* Hide tips when empty or loading */
+        .waifu-tips:empty {
+            display: none;
+        }
+
+        /* Small screen adjustments */
+        @media (max-width: 768px) {
+            .waifu-container {
+                bottom: 10px;
+                right: 10px;
+                transform: scale(0.82);
+                transform-origin: bottom right;
+            }
+            #live2d-canvas {
+                width: 180px;
+                height: 210px;
+            }
+            .waifu-tips {
+                max-width: 200px;
+                font-size: 0.78rem;
+                padding: 10px 14px;
+            }
+        }
+        @media (max-width: 480px) {
+            .waifu-container {
+                transform: scale(0.68);
+                bottom: 4px;
+                right: 4px;
+            }
+            #live2d-canvas {
+                width: 150px;
+                height: 180px;
+            }
+            .waifu-tips {
+                max-width: 160px;
+                font-size: 0.7rem;
+                padding: 8px 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2017,6 +2153,160 @@
     </div>
 
     <div id="barangayModal" class="modal"><div class="modal-content"><div class="modal-header"><h2><i class="fa-solid fa-building"></i> Create New Barangay</h2><button class="close-modal" id="closeBarangayModal">&times;</button></div><div class="form-scroll-container"><form id="barangayForm"><div class="form-group"><label>Barangay Name <span class="required">*</span></label><input type="text" id="barangayName" placeholder="e.g., North Poblacion" required /></div><div class="form-group"><label>Barangay Code <span class="required">*</span></label><input type="text" id="barangayCode" placeholder="e.g., BRGY-001" required /></div><div class="form-actions"><button type="button" class="btn-cancel" id="cancelBarangayBtn"><i class="fa-solid fa-times"></i> Cancel</button><button type="submit" class="btn-submit"><i class="fa-solid fa-check"></i> Create Barangay</button></div></form></div></div></div>
+
+    <!-- ============================================================
+    WAIFU (Live2D) — Interactive Guide
+    ============================================================ -->
+
+    <!-- Container for waifu + tip bubble -->
+    <div class="waifu-container" id="waifuContainer">
+        <!-- The tip bubble (populated by the widget) -->
+        <div id="waifu-tips" class="waifu-tips"></div>
+        <!-- Live2D canvas -->
+        <div id="live2d-canvas">
+            <canvas id="live2d" width="280" height="300"></canvas>
+        </div>
+    </div>
+
+    <!-- WAIFU CONFIGURATION — Educational messages about the site -->
+    <script>
+        // ─── Custom messages that teach how to use B.E.S.T ───
+        window.waifu = {
+            // Random tips shown while idle
+            messages: [
+                "👋 Hi! I'm your guide to B.E.S.T — the Barangay Electronic System for Total Community Management.",
+                "🌿 B.E.S.T helps you manage your barangay efficiently. Let me show you around!",
+                "🏠 Use the <strong>sidebar</strong> on the left to navigate between modules.",
+                "📊 The <strong>Dashboard</strong> gives you a bird's-eye view of all your data.",
+                "👥 Click <strong>Citizens</strong> to manage every registered member of your community.",
+                "➕ Press the <strong>'Add Citizen'</strong> button to register a new resident.",
+                "🔍 Use the <strong>search bar</strong> to find citizens by name, address, or ID.",
+                "🏡 The <strong>Households</strong> section helps you organize families and residences.",
+                "🏗️ Create new barangays with the <strong>'Create New Barangay'</strong> button.",
+                "🗑️ Delete a barangay or citizen using the <strong>trash icon</strong> next to each entry.",
+                "🆔 Every citizen gets a <strong>unique ID</strong> for easy reference and tracking.",
+                "👴 <strong>Senior citizens</strong> (60+) and <strong>registered voters</strong> are tracked separately.",
+                "🔔 The <strong>notification bell</strong> keeps you updated on important events.",
+                "👨‍💼 The <strong>Officials</strong> section manages barangay leaders and their roles.",
+                "📦 <strong>Services</strong> tracks community services and resident requests.",
+                "📜 <strong>Certificates</strong> handles the issuance of official barangay documents.",
+                "📈 <strong>Reports</strong> provides analytics and insights on barangay activities.",
+                "🔄 The system <strong>automatically syncs</strong> your data across sessions.",
+                "💡 <strong>Tip:</strong> Click on any card or button to explore its function.",
+                "👆 Click on me anytime — I'll share more helpful tips!",
+                "😊 I'm here to help you become a B.E.S.T master. Enjoy exploring!"
+            ],
+            // Text shown when the user is idle (waiting)
+            text: {
+                waiting: [
+                    "How can I help you today? 😊",
+                    "Explore the system — I'll guide you!",
+                    "Click around to discover all the features.",
+                    "Need help? Just click on me!",
+                    "I'm here to make your barangay management easy.",
+                    "Try clicking the 'Add Citizen' button to register someone.",
+                    "Don't forget to check the Dashboard for stats!"
+                ],
+                click: [
+                    "Great choice! That's a key feature of B.E.S.T. 🌟",
+                    "You're doing wonderful! Keep exploring.",
+                    "Excellent! This will help you manage your barangay.",
+                    "Perfect! That's exactly how you use that tool.",
+                    "Nice click! You're learning fast. 💪"
+                ]
+            }
+        };
+
+        // ─── Wait for the widget to load, then inject our tip styling ───
+        document.addEventListener('DOMContentLoaded', function() {
+            // The live2d-widget will create #waifu-tips and #live2d
+            // We already have them in our container, but the widget might replace them.
+            // We'll observe and re-apply our styles if needed.
+            const observer = new MutationObserver(function() {
+                const tips = document.getElementById('waifu-tips');
+                if (tips) {
+                    // Ensure our class stays
+                    if (!tips.classList.contains('waifu-tips')) {
+                        tips.classList.add('waifu-tips');
+                    }
+                }
+            });
+            observer.observe(document.body, { childList: true, subtree: true });
+
+            // Also, if the widget creates its own container, we adapt.
+            // But we already have our container with the right IDs.
+            console.log('🧡 Waifu guide ready — B.E.S.T is here to help!');
+        });
+
+        // ─── Override the widget's tip positioning to use our container ───
+        // The autoload.js will look for #waifu-tips and #live2d.
+        // We already have them inside .waifu-container, so it should work.
+        // We also set pointer-events: auto on children so clicks work.
+
+        // ─── Helper: force a tip to show on load ───
+        window.addEventListener('load', function() {
+            // After the widget loads, show a welcome tip
+            setTimeout(function() {
+                const tips = document.getElementById('waifu-tips');
+                if (tips) {
+                    const welcomeMsg =
+                        "👋 Welcome to B.E.S.T! I'm your virtual guide. Click around and I'll help you learn the system!";
+                    tips.innerHTML = welcomeMsg;
+                    tips.style.opacity = '1';
+                    // Auto-hide after 8 seconds
+                    setTimeout(function() {
+                        tips.style.opacity = '0';
+                        setTimeout(function() { tips.innerHTML = ''; }, 400);
+                    }, 8000);
+                }
+            }, 3500);
+        });
+
+        // ─── Click on the waifu to show a random tip ───
+        document.addEventListener('click', function(e) {
+            const canvas = document.querySelector('#live2d-canvas canvas');
+            if (canvas && (e.target === canvas || canvas.contains(e.target))) {
+                const tips = document.getElementById('waifu-tips');
+                if (tips) {
+                    const msgs = window.waifu.messages || [];
+                    const msg = msgs[Math.floor(Math.random() * msgs.length)] || "😊 Click around to explore B.E.S.T!";
+                    tips.innerHTML = msg;
+                    tips.style.opacity = '1';
+                    setTimeout(function() {
+                        tips.style.opacity = '0';
+                        setTimeout(function() { tips.innerHTML = ''; }, 400);
+                    }, 6000);
+                }
+            }
+        });
+
+        // ─── Also show a tip when hovering over the waifu ───
+        document.addEventListener('mouseover', function(e) {
+            const canvas = document.querySelector('#live2d-canvas canvas');
+            if (canvas && (e.target === canvas || canvas.contains(e.target))) {
+                const tips = document.getElementById('waifu-tips');
+                if (tips && !tips.innerHTML) {
+                    const waiting = window.waifu.text?.waiting || [];
+                    const msg = waiting[Math.floor(Math.random() * waiting.length)] ||
+                        "👋 Need help? Click me for tips!";
+                    tips.innerHTML = msg;
+                    tips.style.opacity = '1';
+                    setTimeout(function() {
+                        tips.style.opacity = '0';
+                        setTimeout(function() { tips.innerHTML = ''; }, 400);
+                    }, 5000);
+                }
+            }
+        });
+    </script>
+
+    <!-- Live2D Widget (autoload) — fetches model and runs the widget -->
+    <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js">
+    </script>
+
+    <!-- ============================================================
+    END WAIFU
+    ============================================================ -->
 
     <script>
         (function() {
