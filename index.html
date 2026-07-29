@@ -7,6 +7,7 @@
     <!-- Font Awesome 6 (Free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
+        /* ────────────── RESET & BASE ────────────── */
         * {
             margin: 0;
             padding: 0;
@@ -28,7 +29,7 @@
             overflow-x: hidden;
         }
 
-        /* ===== FLOATING BACKGROUND PARTICLES ===== */
+        /* ────────────── FLOATING PARTICLES ────────────── */
         #particlesCanvas {
             position: fixed;
             top: 0;
@@ -48,7 +49,7 @@
             z-index: 1;
         }
 
-        /* ===== SPLASH SCREEN (ENHANCED) ===== */
+        /* ────────────── SPLASH SCREEN ────────────── */
         #splashScreen {
             position: fixed;
             top: 0;
@@ -144,7 +145,7 @@
             }
         }
 
-        /* ===== NAVIGATION with glass effect & light blue ===== */
+        /* ────────────── NAVIGATION ────────────── */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -264,10 +265,12 @@
             letter-spacing: 0.3px;
             position: relative;
             overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .login-btn i {
-            margin-right: 8px;
             color: #7bbfff;
         }
 
@@ -278,7 +281,7 @@
             transform: translateY(-2px);
         }
 
-        /* Ripple effect (added via JS) */
+        /* Ripple */
         .ripple {
             position: absolute;
             border-radius: 50%;
@@ -295,7 +298,7 @@
             }
         }
 
-        /* ----- HERO with glass effect & light blue ----- */
+        /* ────────────── HERO ────────────── */
         .hero {
             display: flex;
             flex-direction: column;
@@ -396,7 +399,7 @@
             padding: 0 0.5rem;
         }
 
-        /* ----- feature cards with glass effect & light blue ----- */
+        /* ────────────── FEATURE CARDS ────────────── */
         .features-grid {
             display: flex;
             flex-wrap: wrap;
@@ -473,7 +476,7 @@
             box-shadow: 0 0 15px #4a9fd4;
         }
 
-        /* ----- footer with glass effect & light blue ----- */
+        /* ────────────── FOOTER ────────────── */
         .footer-section {
             border-top: 1px solid #2a4a5a;
             padding: 2.8rem 0 1.5rem;
@@ -541,7 +544,7 @@
             padding-top: 1.5rem;
         }
 
-        /* ----- responsive ----- */
+        /* ────────────── RESPONSIVE ────────────── */
         @media (max-width: 780px) {
             .navbar {
                 flex-direction: column;
@@ -605,7 +608,7 @@
 </head>
 <body>
 
-    <!-- ===== SPLASH SCREEN (ENHANCED) ===== -->
+    <!-- ═══════════ SPLASH SCREEN ═══════════ -->
     <div id="splashScreen">
         <div class="splash-content">
             <img src="BEST.png" alt="BEST Logo" id="splashImage" />
@@ -616,12 +619,12 @@
         </div>
     </div>
 
-    <!-- Background particles canvas -->
+    <!-- Background particles -->
     <canvas id="particlesCanvas"></canvas>
 
     <div class="container">
 
-        <!-- NAVIGATION : BEST branding -->
+        <!-- ═══════════ NAVIGATION ═══════════ -->
         <nav class="navbar">
             <div class="logo">
                 <i class="fas fa-leaf"></i> BEST
@@ -629,7 +632,6 @@
             <div class="nav-links">
                 <a href="#" id="dashboardLink"><i class="fas fa-home" style="margin-right:5px;"></i>Dashboard</a>
                 <a href="#">Barangay</a>
-                <!-- ★ Residents link – now points to Household.html via splash -->
                 <a href="#" id="residentsNavLink">Residents</a>
                 <a href="#">Services</a>
                 <a href="#">Reports</a>
@@ -639,11 +641,12 @@
                 <a href="#">About</a>
             </div>
             <div class="nav-actions">
+                <!-- ★ LOGIN BUTTON – now wired to Login.html -->
                 <span class="login-btn" id="loginBtn"><i class="fas fa-user-circle"></i> Log In</span>
             </div>
         </nav>
 
-        <!-- HERO -->
+        <!-- ═══════════ HERO ═══════════ -->
         <div class="hero">
             <div class="hero-badge">
                 <i class="fas fa-users-between-lines"></i> BARANGAY · ELECTRONIC · TOTAL COMMUNITY
@@ -659,7 +662,7 @@
             </p>
         </div>
 
-        <!-- FEATURE CARDS -->
+        <!-- ═══════════ FEATURE CARDS ═══════════ -->
         <div class="features-grid">
             <div class="feature-card">
                 <i class="fas fa-people-arrows"></i>
@@ -681,12 +684,11 @@
             </div>
         </div>
 
-        <!-- FOOTER -->
+        <!-- ═══════════ FOOTER ═══════════ -->
         <div class="footer-section">
             <div class="footer-links">
                 <a href="#"><i class="fas fa-leaf"></i> BEST</a>
                 <a href="#">Barangay</a>
-                <!-- ★ Footer Residents link also opens Household.html -->
                 <a href="#" id="residentsFooterLink">Residents</a>
                 <a href="#">Services</a>
                 <a href="#">Reports</a>
@@ -715,20 +717,19 @@
         (function() {
             'use strict';
 
-            // ---------- SPLASH SCREEN ----------
+            // ─────────── SPLASH SCREEN ───────────
             const splashScreen = document.getElementById('splashScreen');
-            // Show splash for 3 seconds then fade out
+
             window.addEventListener('load', () => {
                 setTimeout(() => {
                     splashScreen.classList.add('hidden');
-                    // Remove from DOM after transition
                     setTimeout(() => {
                         if (splashScreen.parentNode) splashScreen.remove();
                     }, 600);
                 }, 3000);
             });
 
-            // ---------- REUSABLE SPLASH + NAVIGATION ----------
+            // ─────────── REUSABLE SPLASH + NAVIGATION ───────────
             function showSplashAndNavigate(targetUrl) {
                 let splash = document.getElementById('splashScreen');
                 if (!splash) {
@@ -744,41 +745,41 @@
                 } else {
                     splash.classList.remove('hidden');
                 }
-                // Reset progress bar animation
                 const progressFill = splash.querySelector('.progress-fill');
                 if (progressFill) {
                     progressFill.style.animation = 'none';
-                    progressFill.offsetHeight; // trigger reflow
+                    progressFill.offsetHeight;
                     progressFill.style.animation = 'fillProgress 2.5s ease-in-out forwards';
                 }
-                // Navigate after a short delay
                 setTimeout(() => {
                     window.location.href = targetUrl;
                 }, 2800);
             }
 
-            // ---------- DASHBOARD LINK ----------
-            const dashboardLink = document.getElementById('dashboardLink');
-            dashboardLink.addEventListener('click', function(e) {
+            // ─────────── DASHBOARD LINK ───────────
+            document.getElementById('dashboardLink').addEventListener('click', function(e) {
                 e.preventDefault();
                 showSplashAndNavigate('Dashboard.html');
             });
 
-            // ---------- RESIDENTS LINK (nav) ----------
-            const residentsNavLink = document.getElementById('residentsNavLink');
-            residentsNavLink.addEventListener('click', function(e) {
+            // ─────────── RESIDENTS LINKS (nav + footer) ───────────
+            document.getElementById('residentsNavLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                showSplashAndNavigate('Household.html');
+            });
+            document.getElementById('residentsFooterLink').addEventListener('click', function(e) {
                 e.preventDefault();
                 showSplashAndNavigate('Household.html');
             });
 
-            // ---------- RESIDENTS LINK (footer) ----------
-            const residentsFooterLink = document.getElementById('residentsFooterLink');
-            residentsFooterLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                showSplashAndNavigate('Household.html');
+            // ─────────── ★ LOGIN BUTTON → Login.html ───────────
+            document.getElementById('loginBtn').addEventListener('click', function(e) {
+                // Prevent any parent ripple interference
+                e.stopPropagation();
+                showSplashAndNavigate('Login.html');
             });
 
-            // ---------- BACKGROUND PARTICLES (Canvas) ----------
+            // ─────────── BACKGROUND PARTICLES ───────────
             const canvas = document.getElementById('particlesCanvas');
             const ctx = canvas.getContext('2d');
             let particles = [];
@@ -833,7 +834,6 @@
                     p.update();
                     p.draw();
                 });
-                // Connect nearby particles with lines
                 for (let i = 0; i < particles.length; i++) {
                     for (let j = i + 1; j < particles.length; j++) {
                         const dx = particles[i].x - particles[j].x;
@@ -855,7 +855,7 @@
             initParticles(60);
             animateParticles();
 
-            // ---------- RIPPLE EFFECT ON CLICK ----------
+            // ─────────── RIPPLE EFFECT ───────────
             function createRipple(e) {
                 const target = e.currentTarget;
                 const ripple = document.createElement('span');
@@ -873,13 +873,12 @@
                 }, 600);
             }
 
-            // Attach ripple to interactive elements
             const rippleElements = document.querySelectorAll('button, .login-btn, .feature-card, .nav-links a, .footer-social i, .footer-links a');
             rippleElements.forEach(el => {
                 el.addEventListener('click', createRipple);
             });
 
-            // ---------- SMOOTH SCROLL REVEAL (Intersection Observer) ----------
+            // ─────────── SCROLL REVEAL ───────────
             const revealElements = document.querySelectorAll('.hero, .feature-card, .footer-section');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -897,7 +896,6 @@
                 observer.observe(el);
             });
 
-            // Make hero visible immediately if already in view
             window.addEventListener('load', () => {
                 revealElements.forEach(el => {
                     const rect = el.getBoundingClientRect();
@@ -908,7 +906,7 @@
                 });
             });
 
-            console.log('✅ BEST: Residents → Household.html  |  Dashboard → Dashboard.html');
+            console.log('✅ BEST: Log In → Login.html  |  Residents → Household.html  |  Dashboard → Dashboard.html');
         })();
     </script>
 </body>
